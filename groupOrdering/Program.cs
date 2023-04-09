@@ -63,6 +63,10 @@ namespace groupOrdering
             {
                 message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
             }
+            else if (command.Equals("test"))
+            {
+                message.Channel.SendMessageAsync($@"Test {message.Author.Mention}");
+            }
             return Task.CompletedTask;
         }
     }
