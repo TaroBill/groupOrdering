@@ -7,7 +7,7 @@ using System.Transactions;
 
 namespace groupOrdering.Domain
 {
-    internal class JoinOrderHandler
+    public class JoinOrderHandler
     {
         private IDictionary<string, GroupBuying> _joinOrderProcess;
 

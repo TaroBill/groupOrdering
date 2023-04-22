@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class GroupBuying
+    public class GroupBuying
     {
         private Store _store;
         private DateTime _endTime;

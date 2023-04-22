@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class GroupBuyingApp
+    public class GroupBuyingApp
     {
         private CreateOrderHandler _createOrderHandler;
         private CreateStoreHandler _createStoreHandler;

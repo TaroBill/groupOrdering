@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class MemberOrder
+    public class MemberOrder
     {
         private string _userID;
         private IDictionary<StoreItem, int> _items;

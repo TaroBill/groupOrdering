@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class EndGroupBuyingHandler
+    public class EndGroupBuyingHandler
     {
         public EndGroupBuyingHandler() 
         {
