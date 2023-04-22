@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace groupOrdering
+namespace groupOrdering.UI
 {
     class Program
     {
@@ -23,7 +23,7 @@ namespace groupOrdering
             };
             _client = new DiscordSocketClient(cinfig);
             _client.MessageReceived += CommandHandler;
-            
+
             _client.Log += Log;
 
             var token = File.ReadAllText("token.txt");
