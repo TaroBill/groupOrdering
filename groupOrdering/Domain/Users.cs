@@ -8,5 +8,14 @@ namespace groupOrdering.Domain
 {
     internal class Users
     {
+        public Users() 
+        {
+
+        }
+
+        public void AddNewDebt(string recieveUserID, string spendUserID, int money)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

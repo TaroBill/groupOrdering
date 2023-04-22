@@ -8,5 +8,14 @@ namespace groupOrdering.Domain
 {
     internal class EndGroupBuyingHandler
     {
+        public EndGroupBuyingHandler() 
+        {
+        
+        }
+
+        public void EndGroupBuying()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
