@@ -6,8 +6,20 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class StoreItem
+    public class StoreItem
     {
+        private readonly string _itemID;
+        private readonly string _itemName;
+        private readonly int _price;
 
+        public StoreItem(string itemID, string itemName, int price)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetPrice(string itemID)
+        {
+            return _price;
+        }
     }
 }

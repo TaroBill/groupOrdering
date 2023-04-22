@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class DataCatalog
+    public class DataCatalog
     {
+        public List<Store> ListStores()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<GroupBuying> ListAllOrders()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

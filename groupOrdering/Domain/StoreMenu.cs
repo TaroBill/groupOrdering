@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    internal class StoreMenu
+    public class StoreMenu
     {
+        public void AddItem(string itemName, int price)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
