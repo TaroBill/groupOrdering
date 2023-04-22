@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "groupOrdering", "groupOrdering\groupOrdering.csproj", "{A23A5DB9-8E9D-4BFD-A03A-30BB94FFD03E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "groupOrdering", "groupOrdering\groupOrdering.csproj", "{A23A5DB9-8E9D-4BFD-A03A-30BB94FFD03E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "groupOrderingTests", "groupOrderingTests\groupOrderingTests.csproj", "{D7A29E49-7D33-439D-8C6F-151195326198}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A23A5DB9-8E9D-4BFD-A03A-30BB94FFD03E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A23A5DB9-8E9D-4BFD-A03A-30BB94FFD03E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A23A5DB9-8E9D-4BFD-A03A-30BB94FFD03E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A29E49-7D33-439D-8C6F-151195326198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A29E49-7D33-439D-8C6F-151195326198}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A29E49-7D33-439D-8C6F-151195326198}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A29E49-7D33-439D-8C6F-151195326198}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
