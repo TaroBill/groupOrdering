@@ -11,6 +11,15 @@ namespace groupOrdering.Domain.Tests
     [TestClass()]
     public class GroupBuyingTests
     {
+        private GroupBuying _groupBuying;
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            _groupBuying = new GroupBuying();
+        }
+
+
         [TestMethod()]
         public void GroupBuyingTest()
         {

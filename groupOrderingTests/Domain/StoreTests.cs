@@ -14,7 +14,7 @@ namespace groupOrdering.Domain.Tests
         private Store _store;
 
         [TestInitialize()]
-        private void Initialize() 
+        public void Initialize() 
         {
             _store = new Store();
         }
