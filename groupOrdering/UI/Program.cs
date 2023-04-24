@@ -42,30 +42,25 @@ namespace groupOrdering.UI
 
         private Task CommandHandler(SocketMessage message)
         {
+            string messageString = message.Content;
 
-            string command = "";
-            int lengthOfCommand = -1;
-
-            if (!message.Content.StartsWith('!'))
+            if (!messageString.StartsWith('!'))
                 return Task.CompletedTask;
 
             if (message.Author.IsBot)
                 return Task.CompletedTask;
 
-            if (message.Content.Contains(' '))
-                lengthOfCommand = message.Content.IndexOf(' ');
-            else
-                lengthOfCommand = message.Content.Length;
+            string[] words = messageString.Split(' ');
 
-            command = message.Content.Substring(1, lengthOfCommand - 1).ToLower();
+            string command = words[0].Substring(1);
 
-            if (command.Equals("hello"))
+            switch (command)
             {
-                message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
-            }
-            else if (command.Equals("test"))
-            {
-                message.Channel.SendMessageAsync($@"Test {message.Author.Mention}");
+                case "hello":
+                    message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
+                    break;
+                default:
+                    break;
             }
             return Task.CompletedTask;
         }
