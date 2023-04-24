@@ -8,12 +8,12 @@ namespace groupOrdering.Domain
 {
     public class DataCatalog
     {
-        public List<Store> ListStores()
+        public List<Store> ListStores(string serverID)
         {
             throw new NotImplementedException();
         }
 
-        public List<GroupBuying> ListAllOrders()
+        public List<GroupBuying> ListAllOrders(string serverID)
         {
             throw new NotImplementedException();
         }

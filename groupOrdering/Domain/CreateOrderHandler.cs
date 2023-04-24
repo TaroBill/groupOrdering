@@ -10,17 +10,24 @@ namespace groupOrdering.Domain
     {
         private IDictionary<string, GroupBuying> _CreateOrderProcess;
 
+        public GroupBuying? GetGroupBuying(string userID)
+        {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+                return null;
+            return _CreateOrderProcess[userID];
+        }
+
         public void CreateGroupBuying(string userID)
         {
             throw new NotImplementedException();
         }
 
-        public List<Store> ListStore()
+        public List<Store> ListStore(string serverID)
         {
             throw new NotImplementedException();
         }
 
-        public void ChooseExistStore(string userID, string storeID)
+        public void ChooseExistStore(string userID, int storeID)
         {
             throw new NotImplementedException();
         }

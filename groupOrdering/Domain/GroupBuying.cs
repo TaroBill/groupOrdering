@@ -9,15 +9,21 @@ namespace groupOrdering.Domain
     public class GroupBuying
     {
         private Store _store;
-        private DateTime _endTime;
+        public DateTime EndTime { get; }
 
         public GroupBuying()
         {
             _store = new Store();
-            _endTime = DateTime.Now;
+            EndTime = DateTime.Today;
         }
 
-        public void ChooseExistStore(string storeID)
+        public Store GetStore()
+        {
+            return _store;
+        }
+
+
+        public void ChooseExistStore(int storeID)
         {
             throw new NotImplementedException();
         }

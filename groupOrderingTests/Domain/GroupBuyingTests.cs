@@ -29,19 +29,23 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ChooseExistStoreTest()
         {
-            Assert.Fail();
+            const int STORE_ID = 1;
+            Store store = _groupBuying.GetStore();
+            Assert.AreEqual(0, store.StoreID);
+
+            _groupBuying.ChooseExistStore(STORE_ID);
+            Assert.AreEqual(STORE_ID, store.StoreID);
         }
 
         [TestMethod()]
         public void SetEndTimeTest()
         {
-            Assert.Fail();
-        }
+            Assert.AreEqual(DateTime.Today, _groupBuying.EndTime);
 
-        [TestMethod()]
-        public void PublishGroupBuyingTest()
-        {
-            Assert.Fail();
+            DateTime endTime = DateTime.Now;
+            _groupBuying.SetEndTime(endTime);
+            Assert.AreNotEqual(DateTime.Today, _groupBuying.EndTime);
+            Assert.AreEqual(endTime, _groupBuying.EndTime);
         }
 
         [TestMethod()]
