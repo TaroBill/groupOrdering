@@ -13,7 +13,8 @@ namespace groupOrdering.Domain
 
         public GroupBuying()
         {
-
+            _store = new Store();
+            _endTime = DateTime.Now;
         }
 
         public void ChooseExistStore(string storeID)

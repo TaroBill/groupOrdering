@@ -8,7 +8,22 @@ namespace groupOrdering.Domain
 {
     public class Store
     {
-        public void SetStore(string userID)
+        private List<StoreMenu> _menus;
+        public int StoreID { get; }
+        public string StoreName { get; }
+        public string StoreAddress { get; }
+        public string StorePhoneNumber { get; }
+
+        public Store()
+        {
+            _menus = new List<StoreMenu>();
+            StoreID = 0;
+            StoreName = string.Empty;
+            StoreAddress = string.Empty;
+            StorePhoneNumber = string.Empty;
+        }
+
+        public void SetStore(int storeID)
         {
             throw new NotImplementedException();
         }

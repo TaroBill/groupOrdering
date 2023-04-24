@@ -11,10 +11,24 @@ namespace groupOrdering.Domain.Tests
     [TestClass()]
     public class StoreTests
     {
+        private Store _store;
+
+        [TestInitialize()]
+        private void Initialize() 
+        {
+            _store = new Store();
+        }
+
+
         [TestMethod()]
         public void SetStoreTest()
         {
-            Assert.Fail();
+            const int STORE_ID = 1;
+            _store.SetStore(STORE_ID);
+            Assert.AreEqual(STORE_ID, _store.StoreID);
+            Assert.AreEqual("7-11", _store.StoreName);
+            Assert.AreEqual("台北市", _store.StoreAddress);
+            Assert.AreEqual("0909000000", _store.StorePhoneNumber);
         }
 
         [TestMethod()]
