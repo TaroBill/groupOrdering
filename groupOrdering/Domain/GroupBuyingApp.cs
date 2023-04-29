@@ -15,7 +15,10 @@ namespace groupOrdering.Domain
 
         public GroupBuyingApp()
         {
-
+            _createOrderHandler = new CreateOrderHandler();
+            _createStoreHandler = new CreateStoreHandler();
+            _joinOrderHandler = new JoinOrderHandler();
+            _endGroupBuyingHandler = new EndGroupBuyingHandler();
         }
 
         public CreateStoreHandler GetCreateStoreHandler() { return _createStoreHandler; }

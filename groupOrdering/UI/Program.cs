@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using groupOrdering.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,14 @@ namespace groupOrdering.UI
 {
     class Program
     {
-        public static void Main(string[] args)
-        => new Program().MainAsync().GetAwaiter().GetResult();
+        public static void Main(string[] args) => new Program().MainAsync().GetAwaiter().GetResult();
 
         private DiscordSocketClient _client;
+        private GroupBuyingApp _app;
 
         public async Task MainAsync()
         {
+            _app = new GroupBuyingApp();
             var cinfig = new DiscordSocketConfig
             {
                 GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
@@ -58,6 +60,20 @@ namespace groupOrdering.UI
             {
                 case "hello":
                     message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
+                    break;
+                case "CreateGroupBuying":
+                    _app.GetCreateOrderHandler().CreateGroupBuying(message.Author.Id.ToString());
+                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().ListStore());
+                    break;
+                case "ChooseExistStore":
+                    _app.GetCreateOrderHandler().ChooseExistStore(message.Author.Id.ToString(), words[1], message.Channel.Id.ToString());
+                    message.Channel.SendMessageAsync("已選擇商家");
+                    break;
+                case "SetEndTime":
+                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().SetEndTime(message.Author.Id.ToString(), Convert.ToDateTime(words[1])));
+                    break;
+                case "EndEdit":
+                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().EndEdit(message.Author.Id.ToString()));
                     break;
                 default:
                     break;

@@ -9,23 +9,33 @@ namespace groupOrdering.Domain
     public class Store
     {
         private List<StoreMenu> _menus;
-        public int StoreID { get; }
-        public string StoreName { get; }
-        public string StoreAddress { get; }
-        public string StorePhoneNumber { get; }
+        private int StoreID { get; set; }
+        private string StoreName { get; set; }
+        private string StoreAddress { get; set; }
+        private string StorePhoneNumber { get; set; }
 
         public Store()
         {
-            _menus = new List<StoreMenu>();
-            StoreID = 0;
-            StoreName = string.Empty;
-            StoreAddress = string.Empty;
-            StorePhoneNumber = string.Empty;
+            this._menus = new List<StoreMenu>();
+            this.StoreID = 0;
+            this.StoreName = string.Empty;
+            this.StoreAddress = string.Empty;
+            this.StorePhoneNumber = string.Empty;
+        }
+
+        public string GetStoreName()
+        {
+            return this.StoreName;
+        }
+
+        public string GetStoreID()
+        {
+            return this.StoreID.ToString();
         }
 
         public void SetStore(int storeID)
         {
-            throw new NotImplementedException();
+            this.StoreID = storeID;
         }
 
         public void CreateMenu()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using groupOrdering.Boundary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,9 +9,16 @@ namespace groupOrdering.Domain
 {
     public class DataCatalog
     {
+        private CreateOrderBoundary _boundary;
+
+        public DataCatalog()
+        {
+            _boundary = new CreateOrderBoundary();
+        }
+
         public List<Store> ListStores()
         {
-            throw new NotImplementedException();
+            return _boundary.ListStores();
         }
 
         public List<GroupBuying> ListAllOrders()

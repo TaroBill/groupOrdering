@@ -8,31 +8,75 @@ namespace groupOrdering.Domain
 {
     public class CreateOrderHandler
     {
-        private IDictionary<string, GroupBuying> _CreateOrderProcess;
+        private Dictionary<string, GroupBuying> _CreateOrderProcess;
+        private DataCatalog _DataCatalog;
+
+        public CreateOrderHandler()
+        {
+            _DataCatalog = new DataCatalog();
+            _CreateOrderProcess = new Dictionary<string, GroupBuying>();
+        }
 
         public void CreateGroupBuying(string userID)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                _CreateOrderProcess.Add(userID, new GroupBuying());
+            }
         }
 
-        public List<Store> ListStore()
+        public string ListStore()
         {
-            throw new NotImplementedException();
+            string stores = "";
+            List<Store> list = _DataCatalog.ListStores();
+            foreach (Store store in list)
+            {
+                stores += String.Format("{0}  {1}", store.GetStoreID(), store.GetStoreName()) + '\n';
+            }
+            return stores;
         }
 
-        public void ChooseExistStore(string userID, string storeID)
+        public void ChooseExistStore(string userID, string storeID, string serverID)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                _CreateOrderProcess.Add(userID, new GroupBuying());
+            }
+            _CreateOrderProcess[userID] = new GroupBuying();
+            _CreateOrderProcess[userID].ChooseExistStore(Int32.Parse(storeID), serverID);
         }
 
-        public void SetEndTime(string userID, DateTime time)
+        public string SetEndTime(string userID, DateTime time)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return "尚未挑選店家";
+            }
+            else
+            {
+                _CreateOrderProcess[userID].SetEndTime(time);
+                return "已設定團購結束時間";
+            }
         }
 
-        public void EndEdit(string userID)
+        public string EndEdit(string userID)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return "尚未挑選店家";
+            }
+            else
+            {
+                if (_CreateOrderProcess[userID].PublishGroupBuying(userID))
+                {
+                    _CreateOrderProcess.Remove(userID);
+                    return "已建立團購";
+                }
+                else
+                {
+                    return "尚未設定團購結束時間";
+                }
+            }
         }
     }
 }
