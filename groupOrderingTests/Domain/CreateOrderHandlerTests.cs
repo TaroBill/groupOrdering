@@ -19,7 +19,7 @@ namespace groupOrdering.Domain.Tests
         [TestInitialize()]
         public void Initialize()
         {
-            _createOrderHandler = new CreateOrderHandler();
+            _createOrderHandler = new CreateOrderHandler(new DataCatalog());
         }
 
         [TestMethod()]

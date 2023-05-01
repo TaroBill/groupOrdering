@@ -10,11 +10,14 @@ namespace groupOrdering.Domain
     public class MemberOrder
     {
         private string _userID;
-        private IDictionary<StoreItem, int> _items;
+        private Dictionary<StoreItem, int> _items;
+        private Users _users;
 
-        public MemberOrder()
+        public MemberOrder(Users users)
         {
-
+            _users = users;
+            _items = new Dictionary<StoreItem, int>();
+            _userID = string.Empty;
         }
 
         public void CalculateDebt()

@@ -9,11 +9,11 @@ namespace groupOrdering.Domain
     public class CreateOrderHandler
     {
         private Dictionary<string, GroupBuying> _CreateOrderProcess;
-        private DataCatalog _DataCatalog;
+        private readonly DataCatalog _DataCatalog;
 
-        public CreateOrderHandler()
+        public CreateOrderHandler(DataCatalog dataCatalog)
         {
-            _DataCatalog = new DataCatalog();
+            _DataCatalog = dataCatalog;
             _CreateOrderProcess = new Dictionary<string, GroupBuying>();
         }
 

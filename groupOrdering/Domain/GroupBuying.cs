@@ -14,10 +14,12 @@ namespace groupOrdering.Domain
         private CreateOrderBoundary _createOrderBoundary;
         private string _serverID;
         private DateTime _endTime;
+        private List<MemberOrder> _membersOrders;
 
         public GroupBuying()
         {
             _createOrderBoundary = new CreateOrderBoundary();
+            _membersOrders = new List<MemberOrder>();
             _store = new Store();
             _serverID = "";
             _endTime = DateTime.Today;
@@ -74,7 +76,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void AddItem(string userID, string itemID, int quantity)
+        public void AddItem(string userID, string itemID, int quantity, Users users)
         {
             throw new NotImplementedException();
         }
