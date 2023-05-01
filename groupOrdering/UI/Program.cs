@@ -70,10 +70,30 @@ namespace groupOrdering.UI
                     message.Channel.SendMessageAsync("已選擇商家");
                     break;
                 case "SetEndTime":
-                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().SetEndTime(message.Author.Id.ToString(), Convert.ToDateTime(words[1])));
+                    if (!_app.GetCreateOrderHandler().CheckChooseStore(message.Author.Id.ToString()))
+                    {
+                        message.Channel.SendMessageAsync("尚未挑選店家");
+                    }
+                    else if (!_app.GetCreateOrderHandler().CheckEndTime(message.Author.Id.ToString(), Convert.ToDateTime(words[1])))
+                    {
+                        message.Channel.SendMessageAsync("請確認時間格式是否正常");
+                    }
+                    else
+                    {
+                        _app.GetCreateOrderHandler().SetEndTime(message.Author.Id.ToString(), Convert.ToDateTime(words[1]));
+                        message.Channel.SendMessageAsync("已設定團購結束時間");
+                    }
                     break;
                 case "EndEdit":
-                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().EndEdit(message.Author.Id.ToString()));
+                    if (_app.GetCreateOrderHandler().CheckOrderValid(message.Author.Id.ToString()))
+                    {
+                        _app.GetCreateOrderHandler().EndEdit(message.Author.Id.ToString());
+                        message.Channel.SendMessageAsync("已建立團購");
+                    }
+                    else
+                    {
+                        message.Channel.SendMessageAsync("尚未設定團購結束時間");
+                    }
                     break;
                 default:
                     break;

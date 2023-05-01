@@ -46,37 +46,34 @@ namespace groupOrdering.Domain
             _CreateOrderProcess[userID].ChooseExistStore(Int32.Parse(storeID), serverID);
         }
 
-        public string SetEndTime(string userID, DateTime time)
+        public void SetEndTime(string userID, DateTime time)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
-            {
-                return "尚未挑選店家";
-            }
-            else
-            {
-                _CreateOrderProcess[userID].SetEndTime(time);
-                return "已設定團購結束時間";
-            }
+            _CreateOrderProcess[userID].SetEndTime(time);
         }
 
-        public string EndEdit(string userID)
+        public void EndEdit(string userID)
+        {
+            _CreateOrderProcess[userID].PublishGroupBuying(userID);
+            _CreateOrderProcess.Remove(userID);
+        }
+
+        public bool CheckChooseStore(string userID)
+        {
+            return _CreateOrderProcess.ContainsKey(userID) && _CreateOrderProcess[userID].GetStore().GetStoreID() != "0";
+        }
+
+        public bool CheckEndTime(string userID, DateTime endTime)
+        {
+            return _CreateOrderProcess[userID].CheckEndTime(endTime);
+        }
+
+        public bool CheckOrderValid(string userID)
         {
             if (!_CreateOrderProcess.ContainsKey(userID))
             {
-                return "尚未挑選店家";
+                return false;
             }
-            else
-            {
-                if (_CreateOrderProcess[userID].PublishGroupBuying(userID))
-                {
-                    _CreateOrderProcess.Remove(userID);
-                    return "已建立團購";
-                }
-                else
-                {
-                    return "尚未設定團購結束時間";
-                }
-            }
+            return _CreateOrderProcess[userID].GetEndTime() != DateTime.Parse("2000-01-01");
         }
     }
 }

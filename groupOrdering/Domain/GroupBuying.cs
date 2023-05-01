@@ -25,6 +25,16 @@ namespace groupOrdering.Domain
             _endTime = DateTime.Parse("2000-01-01");
         }
 
+        public Store GetStore()
+        {
+            return _store;
+        }
+
+        public DateTime GetEndTime()
+        {
+            return _endTime;
+        }
+
         public void ChooseExistStore(int storeID, string serverID)
         {
             _storeID = storeID.ToString();
@@ -37,16 +47,14 @@ namespace groupOrdering.Domain
             _endTime = endTime;
         }
 
-        public bool PublishGroupBuying(string userID)
+        public void PublishGroupBuying(string userID)
         {
-            if (_endTime == DateTime.Parse("2000-01-01"))
-            {
-                return false;
-            }
-            else
-            {
-                return _createOrderBoundary.PublishGroupBuying(_storeID.ToString(), _serverID, _endTime, userID)==1;
-            }
+            _createOrderBoundary.PublishGroupBuying(_storeID.ToString(), _serverID, _endTime, userID);
+        }
+
+        public bool CheckEndTime(DateTime endTime)
+        {
+            return endTime > DateTime.Now;
         }
 
         public void SetGroupBuying(string userID)
