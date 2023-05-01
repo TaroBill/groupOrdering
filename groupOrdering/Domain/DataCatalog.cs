@@ -16,12 +16,12 @@ namespace groupOrdering.Domain
             _boundary = new CreateOrderBoundary();
         }
 
-        public List<Store> ListStores()
+        public List<Store> ListStores(string serverID)
         {
-            return _boundary.ListStores();
+            return _boundary.ListStores(serverID);
         }
 
-        public List<GroupBuying> ListAllOrders()
+        public List<GroupBuying> ListAllOrders(string serverID)
         {
             throw new NotImplementedException();
         }

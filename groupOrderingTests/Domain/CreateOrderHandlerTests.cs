@@ -13,6 +13,7 @@ namespace groupOrdering.Domain.Tests
     {
         private CreateOrderHandler _createOrderHandler;
         private const string USER_ID = "Tester";
+        const string STORE_ID = "1";
         private const string SERVER_ID = "test";
 
         [TestInitialize()]
@@ -32,20 +33,19 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ListStoreTest()
         {
-            List<Store> storeList = _createOrderHandler.ListStore(SERVER_ID);
-            Assert.AreNotEqual(0, storeList.Count);
+            string storeList = _createOrderHandler.ListStore(SERVER_ID);
+            Assert.AreNotEqual("", storeList);
         }
 
         [TestMethod()]
         public void ChooseExistStoreTest()
         {
-            const int STORE_ID = 1;
-            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID);
+            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID, SERVER_ID);
             GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNull(groupBuying);
 
             _createOrderHandler.CreateGroupBuying(USER_ID);
-            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID);
+            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID, SERVER_ID);
             groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNotNull(groupBuying);
             Store store = groupBuying.GetStore();
@@ -64,7 +64,7 @@ namespace groupOrdering.Domain.Tests
             _createOrderHandler.SetEndTime(USER_ID, time);
             groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNotNull(groupBuying);
-            Assert.AreEqual(time, groupBuying.EndTime);
+            Assert.AreEqual(time, groupBuying.GetEndTime());
         }
 
         [TestMethod()]
@@ -78,6 +78,7 @@ namespace groupOrdering.Domain.Tests
             groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNotNull(groupBuying);
 
+            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID, SERVER_ID);
             _createOrderHandler.EndEdit(USER_ID);
             groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNull(groupBuying);

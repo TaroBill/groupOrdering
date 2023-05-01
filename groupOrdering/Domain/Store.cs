@@ -1,4 +1,5 @@
-﻿using System;
+﻿using groupOrdering.Boundary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,33 +10,29 @@ namespace groupOrdering.Domain
     public class Store
     {
         private List<StoreMenu> _menus;
-        private int StoreID { get; set; }
-        private string StoreName { get; set; }
-        private string StoreAddress { get; set; }
-        private string StorePhoneNumber { get; set; }
+        private CreateOrderBoundary _createOrderBoundary;
+        public string StoreID { get; set; }
+        public string StoreName { get; set; }
+        public string StoreAddress { get; set; }
+        public string StorePhoneNumber { get; set; }
 
         public Store()
         {
+            this._createOrderBoundary = new CreateOrderBoundary();
             this._menus = new List<StoreMenu>();
-            this.StoreID = 0;
+            this.StoreID = "0";
             this.StoreName = string.Empty;
             this.StoreAddress = string.Empty;
             this.StorePhoneNumber = string.Empty;
         }
 
-        public string GetStoreName()
+        public void SetStore(string storeID, string serverID)
         {
-            return this.StoreName;
-        }
-
-        public string GetStoreID()
-        {
-            return this.StoreID.ToString();
-        }
-
-        public void SetStore(int storeID)
-        {
-            this.StoreID = storeID;
+            Store store = _createOrderBoundary.GetStore(storeID, serverID);
+            this.StoreID = store.StoreID;
+            this.StoreName = store.StoreName;
+            this.StoreAddress = store.StoreAddress;
+            this.StorePhoneNumber = store.StorePhoneNumber;
         }
 
         public void CreateMenu()

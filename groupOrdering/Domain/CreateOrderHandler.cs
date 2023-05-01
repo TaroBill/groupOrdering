@@ -17,6 +17,15 @@ namespace groupOrdering.Domain
             _CreateOrderProcess = new Dictionary<string, GroupBuying>();
         }
 
+        public GroupBuying? GetGroupBuying(string userID)
+        {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return null;
+            }
+            return _CreateOrderProcess[userID];
+        }
+
         public void CreateGroupBuying(string userID)
         {
             if (!_CreateOrderProcess.ContainsKey(userID))
@@ -25,13 +34,13 @@ namespace groupOrdering.Domain
             }
         }
 
-        public string ListStore()
+        public string ListStore(string serverID)
         {
             string stores = "";
-            List<Store> list = _DataCatalog.ListStores();
+            List<Store> list = _DataCatalog.ListStores(serverID);
             foreach (Store store in list)
             {
-                stores += String.Format("{0}  {1}", store.GetStoreID(), store.GetStoreName()) + '\n';
+                stores += $"{store.StoreID}  {store.StoreName}\n";
             }
             return stores;
         }
@@ -40,26 +49,42 @@ namespace groupOrdering.Domain
         {
             if (!_CreateOrderProcess.ContainsKey(userID))
             {
-                _CreateOrderProcess.Add(userID, new GroupBuying());
+                return;
             }
-            _CreateOrderProcess[userID] = new GroupBuying();
-            _CreateOrderProcess[userID].ChooseExistStore(Int32.Parse(storeID), serverID);
+            _CreateOrderProcess[userID].ChooseExistStore(storeID, serverID);
         }
 
         public void SetEndTime(string userID, DateTime time)
         {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return;
+            }
             _CreateOrderProcess[userID].SetEndTime(time);
         }
 
         public void EndEdit(string userID)
         {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return;
+            }
             _CreateOrderProcess[userID].PublishGroupBuying(userID);
             _CreateOrderProcess.Remove(userID);
         }
 
+        public bool CheckStartOrder(string userID)
+        {
+            return _CreateOrderProcess.ContainsKey(userID);
+        }
+
         public bool CheckChooseStore(string userID)
         {
-            return _CreateOrderProcess.ContainsKey(userID) && _CreateOrderProcess[userID].GetStore().GetStoreID() != "0";
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return false;
+            }
+            return _CreateOrderProcess[userID].GetStore().StoreID != "0";
         }
 
         public bool CheckEndTime(string userID, DateTime endTime)
@@ -73,7 +98,7 @@ namespace groupOrdering.Domain
             {
                 return false;
             }
-            return _CreateOrderProcess[userID].GetEndTime() != DateTime.Parse("2000-01-01");
+            return _CreateOrderProcess[userID].GetEndTime() != DateTime.Today;
         }
     }
 }

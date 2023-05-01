@@ -63,11 +63,21 @@ namespace groupOrdering.UI
                     break;
                 case "CreateGroupBuying":
                     _app.GetCreateOrderHandler().CreateGroupBuying(message.Author.Id.ToString());
-                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().ListStore());
+                    //TODO serverID被固定住
+                    string serverID = "test";
+                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().ListStore(serverID));
                     break;
                 case "ChooseExistStore":
-                    _app.GetCreateOrderHandler().ChooseExistStore(message.Author.Id.ToString(), words[1], message.Channel.Id.ToString());
-                    message.Channel.SendMessageAsync("已選擇商家");
+                    if (!_app.GetCreateOrderHandler().CheckStartOrder(message.Author.Id.ToString()))
+                    {
+                        message.Channel.SendMessageAsync("尚未建立團購");
+                    }
+                    else
+                    {
+                        //TODO ServerID要修正
+                        _app.GetCreateOrderHandler().ChooseExistStore(message.Author.Id.ToString(), words[1], "test");
+                        message.Channel.SendMessageAsync("已選擇商家");
+                    }
                     break;
                 case "SetEndTime":
                     if (!_app.GetCreateOrderHandler().CheckChooseStore(message.Author.Id.ToString()))

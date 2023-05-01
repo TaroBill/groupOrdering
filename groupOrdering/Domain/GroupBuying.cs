@@ -12,7 +12,6 @@ namespace groupOrdering.Domain
     {
         private Store _store;
         private CreateOrderBoundary _createOrderBoundary;
-        private string _storeID;
         private string _serverID;
         private DateTime _endTime;
 
@@ -20,9 +19,8 @@ namespace groupOrdering.Domain
         {
             _createOrderBoundary = new CreateOrderBoundary();
             _store = new Store();
-            _storeID = "";
             _serverID = "";
-            _endTime = DateTime.Parse("2000-01-01");
+            _endTime = DateTime.Today;
         }
 
         public Store GetStore()
@@ -35,11 +33,10 @@ namespace groupOrdering.Domain
             return _endTime;
         }
 
-        public void ChooseExistStore(int storeID, string serverID)
+        public void ChooseExistStore(string storeID, string serverID)
         {
-            _storeID = storeID.ToString();
             _serverID = serverID;
-            _store.SetStore(storeID);
+            _store.SetStore(storeID, serverID);
         }
 
         public void SetEndTime(DateTime endTime)
@@ -49,7 +46,7 @@ namespace groupOrdering.Domain
 
         public void PublishGroupBuying(string userID)
         {
-            _createOrderBoundary.PublishGroupBuying(_storeID.ToString(), _serverID, _endTime, userID);
+            _createOrderBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, userID);
         }
 
         public bool CheckEndTime(DateTime endTime)

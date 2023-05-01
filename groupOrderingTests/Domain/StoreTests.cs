@@ -23,12 +23,13 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void SetStoreTest()
         {
-            const int STORE_ID = 1;
-            _store.SetStore(STORE_ID);
-            /*Assert.AreEqual(STORE_ID, _store.StoreID);
+            const string STORE_ID = "1";
+            const string SERVER_ID = "test";
+            _store.SetStore(STORE_ID, SERVER_ID);
+            Assert.AreEqual(STORE_ID, _store.StoreID);
             Assert.AreEqual("7-11", _store.StoreName);
             Assert.AreEqual("台北市", _store.StoreAddress);
-            Assert.AreEqual("0909000000", _store.StorePhoneNumber);*/
+            Assert.AreEqual("0909000000", _store.StorePhoneNumber);
         }
 
         [TestMethod()]
