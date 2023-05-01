@@ -83,5 +83,35 @@ namespace groupOrdering.Domain.Tests
             groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNull(groupBuying);
         }
+
+        [TestMethod()]
+        public void GetGroupBuyingTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CheckStartOrderTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CheckChooseStoreTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CheckEndTimeTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CheckOrderValidTest()
+        {
+            Assert.Fail();
+        }
     }
 }

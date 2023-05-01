@@ -83,5 +83,17 @@ namespace groupOrdering.Domain.Tests
         {
             Assert.Fail();
         }
+
+        [TestMethod()]
+        public void PublishGroupBuyingTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CheckEndTimeTest()
+        {
+            Assert.Fail();
+        }
     }
 }
