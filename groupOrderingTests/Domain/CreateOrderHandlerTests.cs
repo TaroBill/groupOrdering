@@ -25,8 +25,11 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void CreateGroupBuyingTest()
         {
-            _createOrderHandler.CreateGroupBuying(USER_ID);
             GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            Assert.IsNull(groupBuying);
+
+            _createOrderHandler.CreateGroupBuying(USER_ID);
+            groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
             Assert.IsNotNull(groupBuying);
         }
 
