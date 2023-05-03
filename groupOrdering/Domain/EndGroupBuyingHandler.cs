@@ -8,9 +8,10 @@ namespace groupOrdering.Domain
 {
     public class EndGroupBuyingHandler
     {
-        public EndGroupBuyingHandler() 
+        private Users _users;
+        public EndGroupBuyingHandler(Users users) 
         {
-        
+            _users = users;
         }
 
         public void EndGroupBuying()

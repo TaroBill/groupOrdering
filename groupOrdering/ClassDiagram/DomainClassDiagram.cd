@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="groupOrdering.Domain.CreateOrderHandler" Collapsed="true">
+    <Position X="7.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAIAAAIEAEAEAAAAACAAAAAAAAARAIAIAAAAAAAgAAA=</HashCode>
+      <FileName>Domain\CreateOrderHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_CreateOrderProcess" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.CreateStoreHandler" Collapsed="true">
+    <Position X="2" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAEAAAAAAAAAAAAAAAAAAAAFBBAAAAQAAAQAAAAA=</HashCode>
+      <FileName>Domain\CreateStoreHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_CreateStoreProcess" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.DataCatalog" Collapsed="true">
+    <Position X="4.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAIAAAAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Domain\DataCatalog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="groupOrdering.Domain.EndGroupBuyingHandler" Collapsed="true">
+    <Position X="8.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\EndGroupBuyingHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_users" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.GroupBuying" Collapsed="true">
+    <Position X="7.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAkAAoKBIAgAAgAAACAAAAAIgAAAAAAIAAAACABAAAA=</HashCode>
+      <FileName>Domain\GroupBuying.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_store" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="_membersOrders" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.GroupBuyingApp" Collapsed="true">
+    <Position X="2.5" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQBAAAAABAACBAAEAAAAAAAABAIAAAAQAAAAAAAA=</HashCode>
+      <FileName>Domain\GroupBuyingApp.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_createOrderHandler" />
+      <Field Name="_createStoreHandler" />
+      <Field Name="_joinOrderHandler" />
+      <Field Name="_endGroupBuyingHandler" />
+      <Field Name="_dataCatalog" />
+      <Field Name="_users" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.JoinOrderHandler" Collapsed="true">
+    <Position X="5" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAkAAAAAAAAAQAAAAAAAAAAAgAAAAQAAAAAACAAAAAA=</HashCode>
+      <FileName>Domain\JoinOrderHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_joinOrderProcess" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.MemberOrder">
+    <Position X="10.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAgBgAAIAAAAAQAAAAAAA=</HashCode>
+      <FileName>Domain\MemberOrder.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_users" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.Store" Collapsed="true">
+    <Position X="5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgQQAAAAAgAAAAAAAAAAAAQABBAAAAAAAIAASAAACA=</HashCode>
+      <FileName>Domain\Store.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_menus" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.StoreItem" Collapsed="true">
+    <Position X="0.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAABAAAAAEAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\StoreItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="groupOrdering.Domain.StoreMenu" Collapsed="true">
+    <Position X="2.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgBAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Domain\StoreMenu.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Field Name="_items" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="groupOrdering.Domain.Users" Collapsed="true">
+    <Position X="13.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>Domain\Users.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Microsoft JhengHei UI" Size="8.77" />
+</ClassDiagram>

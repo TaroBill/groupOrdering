@@ -8,31 +8,97 @@ namespace groupOrdering.Domain
 {
     public class CreateOrderHandler
     {
-        private IDictionary<string, GroupBuying> _CreateOrderProcess;
+        private Dictionary<string, GroupBuying> _CreateOrderProcess;
+        private readonly DataCatalog _DataCatalog;
+
+        public CreateOrderHandler(DataCatalog dataCatalog)
+        {
+            _DataCatalog = dataCatalog;
+            _CreateOrderProcess = new Dictionary<string, GroupBuying>();
+        }
+
+        public GroupBuying? GetGroupBuying(string userID)
+        {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return null;
+            }
+            return _CreateOrderProcess[userID];
+        }
 
         public void CreateGroupBuying(string userID)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                _CreateOrderProcess.Add(userID, new GroupBuying());
+            }
         }
 
-        public List<Store> ListStore()
+        public string ListStore(string serverID)
         {
-            throw new NotImplementedException();
+            string stores = "";
+            List<Store> list = _DataCatalog.ListStores(serverID);
+            foreach (Store store in list)
+            {
+                stores += $"{store.StoreID}  {store.StoreName}\n";
+            }
+            return stores;
         }
 
-        public void ChooseExistStore(string userID, string storeID)
+        public void ChooseExistStore(string userID, string storeID, string serverID)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return;
+            }
+            _CreateOrderProcess[userID].ChooseExistStore(storeID, serverID);
         }
 
         public void SetEndTime(string userID, DateTime time)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return;
+            }
+            _CreateOrderProcess[userID].SetEndTime(time);
         }
 
         public void EndEdit(string userID)
         {
-            throw new NotImplementedException();
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return;
+            }
+            _CreateOrderProcess[userID].PublishGroupBuying(userID);
+            _CreateOrderProcess.Remove(userID);
+        }
+
+        public bool CheckStartOrder(string userID)
+        {
+            return _CreateOrderProcess.ContainsKey(userID);
+        }
+
+        public bool CheckChooseStore(string userID)
+        {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return false;
+            }
+            return _CreateOrderProcess[userID].GetStore().StoreID != "0";
+        }
+
+        public bool CheckEndTime(string userID, DateTime endTime)
+        {
+            return _CreateOrderProcess[userID].CheckEndTime(endTime);
+        }
+
+        public bool CheckOrderValid(string userID)
+        {
+            if (!_CreateOrderProcess.ContainsKey(userID))
+            {
+                return false;
+            }
+            return _CreateOrderProcess[userID].GetEndTime() != DateTime.Today;
         }
     }
 }

@@ -19,5 +19,12 @@ namespace groupOrdering.Technical
             IEnumerable<T> result = connection.Query<T>(command);
             return result.ToList<T>();
         }
+
+        public int SetData(string command)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            int result = connection.Execute(command);
+            return result;
+        }
     }
 }

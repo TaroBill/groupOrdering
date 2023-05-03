@@ -11,6 +11,15 @@ namespace groupOrdering.Domain.Tests
     [TestClass()]
     public class GroupBuyingTests
     {
+        private GroupBuying _groupBuying;
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            _groupBuying = new GroupBuying();
+        }
+
+
         [TestMethod()]
         public void GroupBuyingTest()
         {
@@ -20,19 +29,23 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ChooseExistStoreTest()
         {
-            Assert.Fail();
+            const string STORE_ID = "1";
+            Store store = _groupBuying.GetStore();
+            Assert.AreEqual("0", store.StoreID);
+
+            _groupBuying.ChooseExistStore(STORE_ID, "test");
+            Assert.AreEqual(STORE_ID, store.StoreID);
         }
 
         [TestMethod()]
         public void SetEndTimeTest()
         {
-            Assert.Fail();
-        }
+            Assert.AreEqual(DateTime.Today, _groupBuying.GetEndTime());
 
-        [TestMethod()]
-        public void PublishGroupBuyingTest()
-        {
-            Assert.Fail();
+            DateTime endTime = DateTime.Now;
+            _groupBuying.SetEndTime(endTime);
+            Assert.AreNotEqual(DateTime.Today, _groupBuying.GetEndTime());
+            Assert.AreEqual(endTime, _groupBuying.GetEndTime());
         }
 
         [TestMethod()]
@@ -67,6 +80,18 @@ namespace groupOrdering.Domain.Tests
 
         [TestMethod()]
         public void GetTotalPriceTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void PublishGroupBuyingTest()
+        {
+            Assert.Fail();
+        }
+
+        [TestMethod()]
+        public void CheckEndTimeTest()
         {
             Assert.Fail();
         }

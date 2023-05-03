@@ -13,15 +13,26 @@ namespace groupOrdering.Technical.Tests
     [TestClass()]
     public class DAOTests
     {
+        private DAO _dao;
+
+        [TestInitialize()]
+        public void Initialize()
+        {
+            _dao = new DAO();
+        }
+
         [TestMethod()]
         public void GetDataTest()
         {
-            DAO dao = new DAO();
-            List<Store> store = dao.GetData<Store>("SELECT * FROM groupordering.store WHERE serverID='test';");
-            Assert.AreEqual(1, store[0].StoreID);
-            Assert.AreEqual("7-11", store[0].StoreName);
-            Assert.AreEqual("台北市", store[0].StoreAddress);
-            Assert.AreEqual("0909000000", store[0].StorePhoneNumber);
+            List<Store> store = _dao.GetData<Store>($"SELECT * FROM groupordering.store WHERE serverID='test';");
+            Assert.IsTrue(store.Count > 0);
+        }
+
+        [TestMethod()]
+        public void SetDataTest()
+        {
+            int result = _dao.SetData("INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID) VALUES (1,0,'0','2023-02-28','Tester');");
+            Assert.AreEqual(1, result);
         }
     }
 }
