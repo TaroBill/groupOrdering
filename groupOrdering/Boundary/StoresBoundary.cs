@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Boundary
 {
-    public class StoresBoundary
+    public class StoresBoundary : IStoresBoundary
     {
         private DAO _dao;
         public StoresBoundary()
