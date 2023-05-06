@@ -56,48 +56,50 @@ namespace groupOrdering.UI
 
             string command = words[0].Substring(1);
 
+            string userID = message.Author.Id.ToString();
+            User user = new User(userID);
             switch (command)
             {
                 case "hello":
                     message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
                     break;
                 case "CreateGroupBuying":
-                    _app.GetCreateOrderHandler().CreateGroupBuying(message.Author.Id.ToString());
+                    _app.GetCreateOrderHandler().CreateGroupBuying(user);
                     //TODO serverID被固定住
                     string serverID = "test";
                     message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().ListStore(serverID));
                     break;
                 case "ChooseExistStore":
-                    if (!_app.GetCreateOrderHandler().CheckStartOrder(message.Author.Id.ToString()))
+                    if (!_app.GetCreateOrderHandler().CheckStartOrder(user))
                     {
                         message.Channel.SendMessageAsync("尚未建立團購");
                     }
                     else
                     {
                         //TODO ServerID要修正
-                        _app.GetCreateOrderHandler().ChooseExistStore(message.Author.Id.ToString(), words[1], "test");
+                        _app.GetCreateOrderHandler().ChooseExistStore(user, words[1], "test");
                         message.Channel.SendMessageAsync("已選擇商家");
                     }
                     break;
                 case "SetEndTime":
-                    if (!_app.GetCreateOrderHandler().CheckChooseStore(message.Author.Id.ToString()))
+                    if (!_app.GetCreateOrderHandler().CheckChooseStore(user))
                     {
                         message.Channel.SendMessageAsync("尚未挑選店家");
                     }
-                    else if (!_app.GetCreateOrderHandler().CheckEndTime(message.Author.Id.ToString(), Convert.ToDateTime(words[1])))
+                    else if (!_app.GetCreateOrderHandler().CheckEndTime(Convert.ToDateTime(words[1])))
                     {
                         message.Channel.SendMessageAsync("請確認時間格式是否正常");
                     }
                     else
                     {
-                        _app.GetCreateOrderHandler().SetEndTime(message.Author.Id.ToString(), Convert.ToDateTime(words[1]));
+                        _app.GetCreateOrderHandler().SetEndTime(user, Convert.ToDateTime(words[1]));
                         message.Channel.SendMessageAsync("已設定團購結束時間");
                     }
                     break;
                 case "EndEdit":
-                    if (_app.GetCreateOrderHandler().CheckOrderValid(message.Author.Id.ToString()))
+                    if (_app.GetCreateOrderHandler().CheckEndTimeValid(user))
                     {
-                        _app.GetCreateOrderHandler().EndEdit(message.Author.Id.ToString());
+                        _app.GetCreateOrderHandler().EndEdit(user);
                         message.Channel.SendMessageAsync("已建立團購");
                     }
                     else

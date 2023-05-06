@@ -10,7 +10,7 @@ namespace groupOrdering.Domain
     public class Store
     {
         private List<StoreMenu> _menus;
-        private CreateOrderBoundary _createOrderBoundary;
+        private StoresBoundary _storesBoundary;
         public string StoreID { get; set; }
         public string StoreName { get; set; }
         public string StoreAddress { get; set; }
@@ -18,7 +18,7 @@ namespace groupOrdering.Domain
 
         public Store()
         {
-            this._createOrderBoundary = new CreateOrderBoundary();
+            this._storesBoundary = new StoresBoundary();
             this._menus = new List<StoreMenu>();
             this.StoreID = "0";
             this.StoreName = string.Empty;
@@ -28,7 +28,7 @@ namespace groupOrdering.Domain
 
         public void SetStore(string storeID, string serverID)
         {
-            Store store = _createOrderBoundary.GetStore(storeID, serverID);
+            Store store = _storesBoundary.GetStore(storeID, serverID);
             this.StoreID = store.StoreID;
             this.StoreName = store.StoreName;
             this.StoreAddress = store.StoreAddress;
@@ -45,7 +45,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void EndBuildStore(string userID)
+        public void EndBuildStore(User user)
         {
             throw new NotImplementedException();
         }

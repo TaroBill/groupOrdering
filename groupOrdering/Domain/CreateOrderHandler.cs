@@ -9,35 +9,33 @@ namespace groupOrdering.Domain
     public class CreateOrderHandler
     {
         private Dictionary<string, GroupBuying> _CreateOrderProcess;
-        private readonly DataCatalog _DataCatalog;
 
-        public CreateOrderHandler(DataCatalog dataCatalog)
+        public CreateOrderHandler()
         {
-            _DataCatalog = dataCatalog;
             _CreateOrderProcess = new Dictionary<string, GroupBuying>();
         }
 
-        public GroupBuying? GetGroupBuying(string userID)
+        public GroupBuying? GetGroupBuying(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
                 return null;
             }
-            return _CreateOrderProcess[userID];
+            return _CreateOrderProcess[user.UserID];
         }
 
-        public void CreateGroupBuying(string userID)
+        public void CreateGroupBuying(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
-                _CreateOrderProcess.Add(userID, new GroupBuying());
+                _CreateOrderProcess.Add(user.UserID, new GroupBuying());
             }
         }
 
         public string ListStore(string serverID)
         {
             string stores = "";
-            List<Store> list = _DataCatalog.ListStores(serverID);
+            List<Store> list = Stores.ListStores(serverID);
             foreach (Store store in list)
             {
                 stores += $"{store.StoreID}  {store.StoreName}\n";
@@ -45,60 +43,60 @@ namespace groupOrdering.Domain
             return stores;
         }
 
-        public void ChooseExistStore(string userID, string storeID, string serverID)
+        public void ChooseExistStore(User user, string storeID, string serverID)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
                 return;
             }
-            _CreateOrderProcess[userID].ChooseExistStore(storeID, serverID);
+            _CreateOrderProcess[user.UserID].ChooseExistStore(storeID, serverID);
         }
 
-        public void SetEndTime(string userID, DateTime time)
+        public void SetEndTime(User user, DateTime time)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
                 return;
             }
-            _CreateOrderProcess[userID].SetEndTime(time);
+            _CreateOrderProcess[user.UserID].SetEndTime(time);
         }
 
-        public void EndEdit(string userID)
+        public void EndEdit(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
                 return;
             }
-            _CreateOrderProcess[userID].PublishGroupBuying(userID);
-            _CreateOrderProcess.Remove(userID);
+            _CreateOrderProcess[user.UserID].PublishGroupBuying(user);
+            _CreateOrderProcess.Remove(user.UserID);
         }
 
-        public bool CheckStartOrder(string userID)
+        public bool CheckStartOrder(User user)
         {
-            return _CreateOrderProcess.ContainsKey(userID);
+            return _CreateOrderProcess.ContainsKey(user.UserID);
         }
 
-        public bool CheckChooseStore(string userID)
+        public bool CheckChooseStore(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
-            return _CreateOrderProcess[userID].GetStore().StoreID != "0";
+            return _CreateOrderProcess[user.UserID].GetStore().StoreID != "0";
         }
 
-        public bool CheckEndTime(string userID, DateTime endTime)
+        public bool CheckEndTime(DateTime endTime)
         {
-            return _CreateOrderProcess[userID].CheckEndTime(endTime);
+            return endTime > DateTime.Now;
         }
 
-        public bool CheckOrderValid(string userID)
+        public bool CheckEndTimeValid(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(userID))
+            if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
-            return _CreateOrderProcess[userID].GetEndTime() != DateTime.Today;
+            return CheckEndTime(_CreateOrderProcess[user.UserID].GetEndTime());
         }
     }
 }

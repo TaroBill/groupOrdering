@@ -6,14 +6,10 @@ using System.Threading.Tasks;
 
 namespace groupOrdering.Domain
 {
-    public class Users
+    public static class Users
     {
-        public Users() 
-        {
 
-        }
-
-        public void AddNewDebt(string recieveUserID, string spendUserID, int money)
+        public static void AddNewDebt(string recieveUserID, string spendUserID, int money)
         {
             throw new NotImplementedException();
         }

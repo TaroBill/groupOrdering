@@ -11,11 +11,9 @@ namespace groupOrdering.Domain
     {
         private string _userID;
         private Dictionary<StoreItem, int> _items;
-        private Users _users;
 
-        public MemberOrder(Users users)
+        public MemberOrder()
         {
-            _users = users;
             _items = new Dictionary<StoreItem, int>();
             _userID = string.Empty;
         }

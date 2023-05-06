@@ -16,24 +16,10 @@ namespace groupOrdering.Boundary
             _dao = new DAO();
         }
 
-        public List<Store> ListStores(string serverID)
-        {
-            return _dao.GetData<Store>($"SELECT * FROM groupordering.store WHERE serverID='{serverID}';");
-        }
 
-        public Store GetStore(string storeID, string serverID)
+        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, User user)
         {
-            return _dao.GetData<Store>($"SELECT * FROM groupordering.store WHERE storeID='{storeID}' AND serverID='{serverID}';").FirstOrDefault(new Store());
-        }
-
-        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID)
-        {
-            return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}');");
-        }
-
-        public List<GroupBuying> ListAllOrders()
-        {
-            throw new NotImplementedException();
+            return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{user.UserID}');");
         }
     }
 }

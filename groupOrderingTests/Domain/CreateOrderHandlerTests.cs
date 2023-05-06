@@ -16,20 +16,24 @@ namespace groupOrdering.Domain.Tests
         const string STORE_ID = "1";
         private const string SERVER_ID = "test";
 
+        private User _user;
+
         [TestInitialize()]
         public void Initialize()
         {
-            _createOrderHandler = new CreateOrderHandler(new DataCatalog());
+            _user = new User(USER_ID);
+            _createOrderHandler = new CreateOrderHandler();
         }
 
         [TestMethod()]
         public void CreateGroupBuyingTest()
         {
-            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+
+            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(USER_ID);
-            groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.CreateGroupBuying(_user);
+            groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
         }
 
@@ -43,13 +47,13 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ChooseExistStoreTest()
         {
-            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID, SERVER_ID);
-            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
+            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(USER_ID);
-            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID, SERVER_ID);
-            groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
+            groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
             Store store = groupBuying.GetStore();
             Assert.AreEqual(STORE_ID, store.StoreID);
@@ -59,13 +63,13 @@ namespace groupOrdering.Domain.Tests
         public void SetEndTimeTest()
         {
             DateTime time = DateTime.Parse("2022/02/22");
-            _createOrderHandler.SetEndTime(USER_ID, time);
-            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.SetEndTime(_user, time);
+            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(USER_ID);
-            _createOrderHandler.SetEndTime(USER_ID, time);
-            groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.SetEndTime(_user, time);
+            groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
             Assert.AreEqual(time, groupBuying.GetEndTime());
         }
@@ -73,48 +77,76 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void EndEditTest()
         {
-            _createOrderHandler.EndEdit(USER_ID);
-            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.EndEdit(_user);
+            GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(USER_ID);
-            groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.CreateGroupBuying(_user);
+            groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
 
-            _createOrderHandler.ChooseExistStore(USER_ID, STORE_ID, SERVER_ID);
-            _createOrderHandler.EndEdit(USER_ID);
-            groupBuying = _createOrderHandler.GetGroupBuying(USER_ID);
+            _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
+            _createOrderHandler.EndEdit(_user);
+            groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
-        }
-
-        [TestMethod()]
-        public void GetGroupBuyingTest()
-        {
-            Assert.Fail();
         }
 
         [TestMethod()]
         public void CheckStartOrderTest()
         {
-            Assert.Fail();
+            bool startedOrder = _createOrderHandler.CheckStartOrder(_user);
+            Assert.IsFalse(startedOrder);
+
+            _createOrderHandler.CreateGroupBuying(_user);
+            startedOrder = _createOrderHandler.CheckStartOrder(_user);
+            Assert.IsTrue(startedOrder);
         }
 
         [TestMethod()]
         public void CheckChooseStoreTest()
         {
-            Assert.Fail();
+            bool chosenStore = _createOrderHandler.CheckChooseStore(_user);
+            Assert.IsFalse(chosenStore);
+
+            _createOrderHandler.CreateGroupBuying(_user);
+            chosenStore = _createOrderHandler.CheckChooseStore(_user);
+            Assert.IsFalse(chosenStore);
+
+            _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
+            chosenStore = _createOrderHandler.CheckChooseStore(_user);
+            Assert.IsTrue(chosenStore);
+
         }
 
         [TestMethod()]
         public void CheckEndTimeTest()
         {
-            Assert.Fail();
+            DateTime dateTime = new DateTime(1969, 12, 10);
+            bool checkEndTime = _createOrderHandler.CheckEndTime(dateTime);
+            Assert.IsFalse(checkEndTime);
+
+            dateTime = DateTime.Now;
+            checkEndTime = _createOrderHandler.CheckEndTime(dateTime);
+            Assert.IsFalse(checkEndTime);
+
+            dateTime.AddDays(10);
+            checkEndTime = _createOrderHandler.CheckEndTime(dateTime);
+            Assert.IsTrue(checkEndTime);
         }
 
         [TestMethod()]
-        public void CheckOrderValidTest()
+        public void CheckEndTimeValidTest()
         {
-            Assert.Fail();
+            bool result = _createOrderHandler.CheckEndTimeValid(_user);
+            Assert.IsFalse(result);
+
+            _createOrderHandler.CreateGroupBuying(_user);
+            result = _createOrderHandler.CheckEndTimeValid(_user);
+            Assert.IsFalse(result);
+
+            _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
+            _createOrderHandler.SetEndTime(_user, DateTime.Now.AddDays(10));
+            Assert.IsTrue(result);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void JoinOrder(string groupBuyingID, string userID)
+        public void JoinOrder(string groupBuyingID, User user)
         {
             throw new NotImplementedException();
         }
@@ -31,7 +31,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void AddItem(string userID, string itemID, int quantity)
+        public void AddItem(User user, string itemID, int quantity)
         {
             throw new NotImplementedException();
         }

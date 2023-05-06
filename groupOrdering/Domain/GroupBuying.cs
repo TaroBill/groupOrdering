@@ -46,17 +46,12 @@ namespace groupOrdering.Domain
             _endTime = endTime;
         }
 
-        public void PublishGroupBuying(string userID)
+        public void PublishGroupBuying(User user)
         {
-            _createOrderBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, userID);
+            _createOrderBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user);
         }
 
-        public bool CheckEndTime(DateTime endTime)
-        {
-            return endTime > DateTime.Now;
-        }
-
-        public void SetGroupBuying(string userID)
+        public void SetGroupBuying(User user)
         {
             throw new NotImplementedException();
         }
@@ -76,7 +71,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void AddItem(string userID, string itemID, int quantity, Users users)
+        public void AddItem(User user, string itemID, int quantity)
         {
             throw new NotImplementedException();
         }

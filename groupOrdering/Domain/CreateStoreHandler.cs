@@ -10,7 +10,7 @@ namespace groupOrdering.Domain
     {
         private IDictionary<string, Store> _CreateStoreProcess;
 
-        public void CreateStore(string userID)
+        public void CreateStore(User user)
         {
             throw new NotImplementedException();
         }
@@ -20,7 +20,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void EndBuildStore(string userID)
+        public void EndBuildStore(User user)
         {
             throw new NotImplementedException();
         }
@@ -40,7 +40,7 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void EndStoreEdition(string userID)
+        public void EndStoreEdition(User user)
         {
             throw new NotImplementedException();
         }

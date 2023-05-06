@@ -12,17 +12,13 @@ namespace groupOrdering.Domain
         private CreateStoreHandler _createStoreHandler;
         private JoinOrderHandler  _joinOrderHandler;
         private EndGroupBuyingHandler _endGroupBuyingHandler;
-        private DataCatalog _dataCatalog;
-        private Users _users;
 
         public GroupBuyingApp()
         {
-            _dataCatalog = new DataCatalog();
-            _createOrderHandler = new CreateOrderHandler(_dataCatalog);
+            _createOrderHandler = new CreateOrderHandler();
             _createStoreHandler = new CreateStoreHandler();
             _joinOrderHandler = new JoinOrderHandler();
-            _endGroupBuyingHandler = new EndGroupBuyingHandler(_users);
-            _users = new Users();
+            _endGroupBuyingHandler = new EndGroupBuyingHandler();
         }
 
         public CreateStoreHandler GetCreateStoreHandler() { return _createStoreHandler; }
