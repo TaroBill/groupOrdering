@@ -1,4 +1,5 @@
-﻿using System;
+﻿using groupOrdering.Boundary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,17 @@ namespace groupOrdering.Domain
     public class CreateOrderHandler
     {
         private Dictionary<string, GroupBuying> _CreateOrderProcess;
+        private IGroupBuyingsBoundary _groupBuyingsBoundary;
 
         public CreateOrderHandler()
         {
             _CreateOrderProcess = new Dictionary<string, GroupBuying>();
+            _groupBuyingsBoundary = new GroupBuyingsBoundary();
+        }
+
+        public void SetGroupBuyingsBoundary(IGroupBuyingsBoundary groupBuyingBoundary)
+        {
+            _groupBuyingsBoundary = groupBuyingBoundary;
         }
 
         public GroupBuying? GetGroupBuying(User user)
@@ -28,7 +36,7 @@ namespace groupOrdering.Domain
         {
             if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
-                _CreateOrderProcess.Add(user.UserID, new GroupBuying());
+                _CreateOrderProcess.Add(user.UserID, new GroupBuying(_groupBuyingsBoundary));
             }
         }
 

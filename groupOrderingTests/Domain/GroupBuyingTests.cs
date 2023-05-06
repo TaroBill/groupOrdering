@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using groupOrdering.Boundary;
+using Moq;
 
 namespace groupOrdering.Domain.Tests
 {
@@ -16,7 +18,14 @@ namespace groupOrdering.Domain.Tests
         [TestInitialize()]
         public void Initialize()
         {
-            _groupBuying = new GroupBuying();
+            var mockGroupBuyingsBoundary = new Mock<IGroupBuyingsBoundary>();
+            mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders("test")).Returns(new List<GroupBuying>()
+            {
+                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購一", "test"),
+                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購二", "test")
+            });
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester")).Returns(1);
+            _groupBuying = new GroupBuying(mockGroupBuyingsBoundary.Object);
         }
 
 

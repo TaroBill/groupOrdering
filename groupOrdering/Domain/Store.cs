@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,20 +11,35 @@ namespace groupOrdering.Domain
     public class Store
     {
         private List<StoreMenu> _menus;
-        private StoresBoundary _storesBoundary;
+        private IStoresBoundary _storesBoundary;
         public string StoreID { get; set; }
         public string StoreName { get; set; }
         public string StoreAddress { get; set; }
         public string StorePhoneNumber { get; set; }
 
-        public Store()
+        private void InitStore(string storeID = "0", string storeName = "", string storeAddress = "", string storePhoneNumber = "")
         {
             this._storesBoundary = new StoresBoundary();
             this._menus = new List<StoreMenu>();
-            this.StoreID = "0";
-            this.StoreName = string.Empty;
-            this.StoreAddress = string.Empty;
-            this.StorePhoneNumber = string.Empty;
+            this.StoreID = storeID;
+            this.StoreName = storeName;
+            this.StoreAddress = storeAddress;
+            this.StorePhoneNumber = storePhoneNumber;
+        }
+
+        public Store()
+        {
+            InitStore();
+        }
+
+        public Store(string storeID, string storeName, string storeAddress, string storePhoneNumber)
+        {
+            InitStore(storeID, storeName, storeAddress, storePhoneNumber);
+        }
+
+        public void SetStoresBoundary(IStoresBoundary storesBoundary)
+        {
+            this._storesBoundary = storesBoundary;
         }
 
         public void SetStore(string storeID, string serverID)

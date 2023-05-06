@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using groupOrdering.Boundary;
+using Moq;
 
 namespace groupOrdering.Domain.Tests
 {
@@ -23,7 +25,17 @@ namespace groupOrdering.Domain.Tests
         {
             _user = new User(USER_ID);
             _createOrderHandler = new CreateOrderHandler();
+
+            var mockGroupBuyingsBoundary = new Mock<IGroupBuyingsBoundary>();
+            mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders("test")).Returns(new List<GroupBuying>()
+            {
+                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購一", "test"),
+                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購二", "test")
+            });
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester")).Returns(1);
+            _createOrderHandler.SetGroupBuyingsBoundary(mockGroupBuyingsBoundary.Object);
         }
+
 
         [TestMethod()]
         public void CreateGroupBuyingTest()
@@ -121,7 +133,7 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void CheckEndTimeTest()
         {
-            DateTime dateTime = new DateTime(1969, 12, 10);
+            DateTime dateTime = new DateTime(2000, 12, 10);
             bool checkEndTime = _createOrderHandler.CheckEndTime(dateTime);
             Assert.IsFalse(checkEndTime);
 

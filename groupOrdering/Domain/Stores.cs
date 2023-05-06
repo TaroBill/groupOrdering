@@ -9,7 +9,7 @@ namespace groupOrdering.Domain
 {
     public static class Stores
     {
-        private static StoresBoundary _storesBoundary = new StoresBoundary();
+        private static IStoresBoundary _storesBoundary = new StoresBoundary();
 
         public static List<Store> ListStores(string serverID)
         {

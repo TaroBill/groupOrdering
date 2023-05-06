@@ -21,5 +21,10 @@ namespace groupOrdering.Boundary
         {
             throw new NotImplementedException();
         }
+
+        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID)
+        {
+            return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}');");
+        }
     }
 }

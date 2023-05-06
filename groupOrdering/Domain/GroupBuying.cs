@@ -10,19 +10,42 @@ namespace groupOrdering.Domain
 {
     public class GroupBuying
     {
+        private string _name;
         private Store _store;
-        private CreateOrderBoundary _createOrderBoundary;
+        private IGroupBuyingsBoundary _groupBuyingsBoundary;
         private string _serverID;
         private DateTime _endTime;
         private List<MemberOrder> _membersOrders;
 
-        public GroupBuying()
+        private void InitGroupBuying(IGroupBuyingsBoundary boundary, string name = "", string serverID = "")
         {
-            _createOrderBoundary = new CreateOrderBoundary();
+            _groupBuyingsBoundary = boundary;
+            _name = name;
+            _serverID = serverID;
             _membersOrders = new List<MemberOrder>();
             _store = new Store();
-            _serverID = "";
             _endTime = DateTime.Today;
+        }
+
+        public GroupBuying(IGroupBuyingsBoundary boundary)
+        {
+            InitGroupBuying(boundary);
+        }
+
+        public GroupBuying(IGroupBuyingsBoundary boundary, string name, string serverID)
+        {
+            InitGroupBuying(boundary, name, serverID);
+        }
+
+        public GroupBuying(IGroupBuyingsBoundary boundary, string name, string serverID, DateTime endTime)
+        {
+            InitGroupBuying(boundary, name, serverID);
+            _endTime = endTime;
+        }
+
+        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID)
+        {
+            throw new NotImplementedException();
         }
 
         public Store GetStore()
@@ -48,7 +71,7 @@ namespace groupOrdering.Domain
 
         public void PublishGroupBuying(User user)
         {
-            _createOrderBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user);
+            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID);
         }
 
         public void SetGroupBuying(User user)
