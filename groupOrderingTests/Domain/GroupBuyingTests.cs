@@ -15,16 +15,26 @@ namespace groupOrdering.Domain.Tests
     {
         private GroupBuying _groupBuying;
 
+        private const string USER_ID = "Tester";
+        private const string STORE_ID = "1";
+        private const string SERVER_ID = "test";
+
         [TestInitialize()]
         public void Initialize()
         {
             var mockGroupBuyingsBoundary = new Mock<IGroupBuyingsBoundary>();
-            mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders("test")).Returns(new List<GroupBuying>()
+            GroupBuying groupBuying1 = new GroupBuying(mockGroupBuyingsBoundary.Object, "1", "測試團購一", SERVER_ID);
+            GroupBuying groupBuying2 = new GroupBuying(mockGroupBuyingsBoundary.Object, "2", "測試團購二", SERVER_ID);
+            Store store1 = new Store("1", "7-11", "台北市", "0909000000");
+            Store store2 = new Store("2", "全家", "我家對面", "0911111111");
+            groupBuying1.SetStore(store1);
+            groupBuying2.SetStore(store2);
+            mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders(SERVER_ID)).Returns(new List<GroupBuying>()
             {
-                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購一", "test"),
-                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購二", "test")
+                groupBuying1,
+                groupBuying2
             });
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester")).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID)).Returns(1);
             _groupBuying = new GroupBuying(mockGroupBuyingsBoundary.Object);
         }
 

@@ -10,6 +10,8 @@ namespace groupOrdering.Domain
 {
     public class GroupBuying
     {
+        public string GroupBuyingID { get; set; }
+
         private string _name;
         private Store _store;
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
@@ -17,8 +19,9 @@ namespace groupOrdering.Domain
         private DateTime _endTime;
         private List<MemberOrder> _membersOrders;
 
-        private void InitGroupBuying(IGroupBuyingsBoundary boundary, string name = "", string serverID = "")
+        private void InitGroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID = "0", string name = "", string serverID = "")
         {
+            GroupBuyingID = groupBuyingID;
             _groupBuyingsBoundary = boundary;
             _name = name;
             _serverID = serverID;
@@ -32,14 +35,14 @@ namespace groupOrdering.Domain
             InitGroupBuying(boundary);
         }
 
-        public GroupBuying(IGroupBuyingsBoundary boundary, string name, string serverID)
+        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID, string name, string serverID)
         {
-            InitGroupBuying(boundary, name, serverID);
+            InitGroupBuying(boundary, groupBuyingID,  name, serverID);
         }
 
-        public GroupBuying(IGroupBuyingsBoundary boundary, string name, string serverID, DateTime endTime)
+        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID, string name, string serverID, DateTime endTime)
         {
-            InitGroupBuying(boundary, name, serverID);
+            InitGroupBuying(boundary, groupBuyingID, name, serverID);
             _endTime = endTime;
         }
 
@@ -51,6 +54,11 @@ namespace groupOrdering.Domain
         public Store GetStore()
         {
             return _store;
+        }
+
+        public void SetStore(Store store)
+        {
+            _store = store;
         }
 
         public DateTime GetEndTime()

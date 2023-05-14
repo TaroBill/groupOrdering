@@ -10,7 +10,7 @@ namespace groupOrdering.Domain
 {
     public class Store
     {
-        private List<StoreMenu> _menus;
+        private List<StoreItem> _items;
         private IStoresBoundary _storesBoundary;
         public string StoreID { get; set; }
         public string StoreName { get; set; }
@@ -20,7 +20,7 @@ namespace groupOrdering.Domain
         private void InitStore(string storeID = "0", string storeName = "", string storeAddress = "", string storePhoneNumber = "")
         {
             this._storesBoundary = new StoresBoundary();
-            this._menus = new List<StoreMenu>();
+            this._items = new List<StoreItem>();
             this.StoreID = storeID;
             this.StoreName = storeName;
             this.StoreAddress = storeAddress;
@@ -49,11 +49,6 @@ namespace groupOrdering.Domain
             this.StoreName = store.StoreName;
             this.StoreAddress = store.StoreAddress;
             this.StorePhoneNumber = store.StorePhoneNumber;
-        }
-
-        public void CreateMenu()
-        {
-            throw new NotImplementedException();
         }
 
         public void AddStoreItem(string itemName, int price)

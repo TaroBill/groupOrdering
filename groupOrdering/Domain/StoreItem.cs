@@ -8,18 +8,13 @@ namespace groupOrdering.Domain
 {
     public class StoreItem
     {
-        private readonly string _itemID;
-        private readonly string _itemName;
-        private readonly int _price;
+        public string ItemID { get; set; }
+        public string ItemName { get; set; }
+        public int Price { get; set; }
 
         public StoreItem(string itemID, string itemName, int price)
         {
             throw new NotImplementedException();
-        }
-
-        public int GetPrice(string itemID)
-        {
-            return _price;
         }
     }
 }

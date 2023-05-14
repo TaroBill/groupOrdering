@@ -15,7 +15,7 @@ namespace groupOrdering.Domain.Tests
     {
         private CreateOrderHandler _createOrderHandler;
         private const string USER_ID = "Tester";
-        const string STORE_ID = "1";
+        private const string STORE_ID = "1";
         private const string SERVER_ID = "test";
 
         private User _user;
@@ -27,12 +27,12 @@ namespace groupOrdering.Domain.Tests
             _createOrderHandler = new CreateOrderHandler();
 
             var mockGroupBuyingsBoundary = new Mock<IGroupBuyingsBoundary>();
-            mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders("test")).Returns(new List<GroupBuying>()
+            mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders(SERVER_ID)).Returns(new List<GroupBuying>()
             {
-                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購一", "test"),
-                new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購二", "test")
+                new GroupBuying(mockGroupBuyingsBoundary.Object, "1", "測試團購一", SERVER_ID),
+                new GroupBuying(mockGroupBuyingsBoundary.Object, "2", "測試團購二", SERVER_ID)
             });
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester")).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID)).Returns(1);
             _createOrderHandler.SetGroupBuyingsBoundary(mockGroupBuyingsBoundary.Object);
         }
 
