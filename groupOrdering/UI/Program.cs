@@ -15,15 +15,20 @@ namespace groupOrdering.UI
 
         private DiscordSocketClient _client;
         private GroupBuyingApp _app;
+        private CreateOrderUI _createOrderUI;
 
         public async Task MainAsync()
         {
-            _app = new GroupBuyingApp();
             var cinfig = new DiscordSocketConfig
             {
                 GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent
             };
+
+            _app = new GroupBuyingApp();
             _client = new DiscordSocketClient(cinfig);
+
+            _createOrderUI = new CreateOrderUI(_client, _app);
+
             _client.MessageReceived += CommandHandler;
 
             _client.Log += Log;
@@ -44,72 +49,6 @@ namespace groupOrdering.UI
 
         private Task CommandHandler(SocketMessage message)
         {
-            string messageString = message.Content;
-
-            if (!messageString.StartsWith('!'))
-                return Task.CompletedTask;
-
-            if (message.Author.IsBot)
-                return Task.CompletedTask;
-
-            string[] words = messageString.Split(' ');
-
-            string command = words[0].Substring(1);
-
-            string userID = message.Author.Id.ToString();
-            User user = new User(userID);
-            switch (command)
-            {
-                case "hello":
-                    message.Channel.SendMessageAsync($@"Hello {message.Author.Mention}");
-                    break;
-                case "CreateGroupBuying":
-                    _app.GetCreateOrderHandler().CreateGroupBuying(user);
-                    //TODO serverID被固定住
-                    string serverID = "test";
-                    message.Channel.SendMessageAsync(_app.GetCreateOrderHandler().ListStore(serverID));
-                    break;
-                case "ChooseExistStore":
-                    if (!_app.GetCreateOrderHandler().CheckStartOrder(user))
-                    {
-                        message.Channel.SendMessageAsync("尚未建立團購");
-                    }
-                    else
-                    {
-                        //TODO ServerID要修正
-                        _app.GetCreateOrderHandler().ChooseExistStore(user, words[1], "test");
-                        message.Channel.SendMessageAsync("已選擇商家");
-                    }
-                    break;
-                case "SetEndTime":
-                    if (!_app.GetCreateOrderHandler().CheckChooseStore(user))
-                    {
-                        message.Channel.SendMessageAsync("尚未挑選店家");
-                    }
-                    else if (!_app.GetCreateOrderHandler().CheckEndTime(Convert.ToDateTime(words[1])))
-                    {
-                        message.Channel.SendMessageAsync("請確認時間格式是否正常");
-                    }
-                    else
-                    {
-                        _app.GetCreateOrderHandler().SetEndTime(user, Convert.ToDateTime(words[1]));
-                        message.Channel.SendMessageAsync("已設定團購結束時間");
-                    }
-                    break;
-                case "EndEdit":
-                    if (_app.GetCreateOrderHandler().CheckEndTimeValid(user))
-                    {
-                        _app.GetCreateOrderHandler().EndEdit(user);
-                        message.Channel.SendMessageAsync("已建立團購");
-                    }
-                    else
-                    {
-                        message.Channel.SendMessageAsync("尚未設定團購結束時間");
-                    }
-                    break;
-                default:
-                    break;
-            }
             return Task.CompletedTask;
         }
     }

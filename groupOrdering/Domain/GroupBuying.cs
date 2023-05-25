@@ -71,7 +71,7 @@ namespace groupOrdering.Domain
 
         public void PublishGroupBuying(User user)
         {
-            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID);
+            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, _name);
         }
 
         public void SetGroupBuying(User user)

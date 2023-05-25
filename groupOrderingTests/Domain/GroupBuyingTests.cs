@@ -24,7 +24,7 @@ namespace groupOrdering.Domain.Tests
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購一", "test"),
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購二", "test")
             });
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester")).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester", "")).Returns(1);
             _groupBuying = new GroupBuying(mockGroupBuyingsBoundary.Object);
         }
 
