@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static groupOrdering.Technical.DTO;
 
 namespace groupOrdering.Boundary
 {
@@ -17,9 +18,18 @@ namespace groupOrdering.Boundary
             _dao = new DAO();
         }
 
-        public List<GroupBuying> ListAllOrders(string serverID)
+        public Store getStoreIDByGroupbuyingID(string groupbuyingID)
         {
-            throw new NotImplementedException();
+            return _dao.GetData<Store>($"SELECT * FROM groupordering.groupbuying " +
+                                        $"WHERE groupbuying.groupbuyingID='{groupbuyingID}';").FirstOrDefault(new Store());
+        }
+
+        public List<GroupBuyingDTO> ListAllOrders(string serverID)
+        {
+            return _dao.GetData<GroupBuyingDTO>($"SELECT CONVERT(groupbuying.groupbuyingID, CHAR) AS groupbuyingID, store.storeID, store.storeName AS groupbuyingName " +
+                                        $"FROM groupordering.groupbuying LEFT JOIN groupordering.store " +
+                                        $"ON groupbuying.storeID=store.storeID " +
+                                        $"WHERE groupbuying.serverID='{serverID}';");
         }
 
         public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID)

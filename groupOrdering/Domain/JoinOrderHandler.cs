@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
+using static groupOrdering.Technical.DTO;
 
 namespace groupOrdering.Domain
 {
     public class JoinOrderHandler
     {
         private IDictionary<string, GroupBuying> _joinOrderProcess;
-
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
 
         public JoinOrderHandler() 
@@ -35,29 +35,83 @@ namespace groupOrdering.Domain
             _groupBuyingsBoundary = boundary;
         }
 
-        public string ListAllOrder(string serverID)
+        public List<GroupBuyingDTO> ListAllOrder(string serverID)
         {
-            throw new NotImplementedException();
+            return GroupBuyings.ListAllOrders(serverID);
         }
 
         public bool JoinOrder(string serverID, string groupBuyingID, User user)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _joinOrderProcess[user.UserID] = new GroupBuying(_groupBuyingsBoundary, groupBuyingID, serverID);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                return false;
+            }
         }
 
-        public string ListItemsOfStore(string groupBuyingID, string serverID)
+        public List<StoreItem> ListItemsOfStore(string groupBuyingID, string serverID)
         {
-            throw new NotImplementedException();
+            _joinOrderProcess.Add("test", new GroupBuying(_groupBuyingsBoundary));
+            string storeID = _joinOrderProcess["test"].getStoreIDByGroupbuyingID(groupBuyingID);
+            _joinOrderProcess["test"].ChooseExistStore(storeID, serverID);
+            List<StoreItem> storeItems = _joinOrderProcess["test"].ListItemsOfStore();
+            _joinOrderProcess.Remove("test");
+            return storeItems;
         }
 
         public bool AddItem(User user, string itemID, int quantity)
         {
-            throw new NotImplementedException();
+            if (_joinOrderProcess.ContainsKey(user.UserID))
+            {
+                _joinOrderProcess[user.UserID].AddItem(itemID, quantity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
-        public bool SubmitOrder(User user)
+        public bool EditItem(User user, string itemID, int quantity)
         {
-            throw new NotImplementedException();
+            if (_joinOrderProcess.ContainsKey(user.UserID))
+            {
+                _joinOrderProcess[user.UserID].EditItem(itemID, quantity);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool DeleteItem(User user, string itemID)
+        {
+            if (_joinOrderProcess.ContainsKey(user.UserID))
+            {
+                _joinOrderProcess[user.UserID].DeleteItem(user, itemID);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public int SubmitOrder(User user)
+        {
+            int totalPrice = _joinOrderProcess[user.UserID].SubmitOrder(user);
+            _joinOrderProcess.Remove(user.UserID);
+            return totalPrice;
+        }
+
+        public bool CheckValid(User user)
+        {
+            return _joinOrderProcess.ContainsKey(user.UserID);
         }
     }
 }
