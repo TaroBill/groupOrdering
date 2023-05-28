@@ -14,5 +14,12 @@ namespace groupOrdering.Technical
             public string groupbuyingName { get;set; }
             public string storeID { get; set; }
         }
+
+        public class GroupDTO
+        {
+            public string groupbuyingID { get; set; }
+            public string groupbuyingName { get; set; }
+            public string storeID { get; set; }
+        }
     }
 }
