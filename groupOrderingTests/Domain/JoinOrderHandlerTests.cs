@@ -29,8 +29,8 @@ namespace groupOrdering.Domain.Tests
 
             var mockGroupBuyingsBoundary = new Mock<IGroupBuyingsBoundary>();
 
-            GroupBuying groupBuying1 = new GroupBuying(mockGroupBuyingsBoundary.Object, "1", "測試團購一", SERVER_ID);
-            GroupBuying groupBuying2 = new GroupBuying(mockGroupBuyingsBoundary.Object, "2", "測試團購二", SERVER_ID);
+            GroupBuying groupBuying1 = new GroupBuying(mockGroupBuyingsBoundary.Object, "1", "測試團購1", SERVER_ID);
+            GroupBuying groupBuying2 = new GroupBuying(mockGroupBuyingsBoundary.Object, "2", "測試團購2", SERVER_ID);
             Store store1 = new Store("1", "7-11", "台北市", "0909000000");
             Store store2 = new Store("2", "全家", "我家對面", "0911111111");
             store1.AddStoreItem("御飯糰", 30);
@@ -53,8 +53,13 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ListAllOrderTest()
         {
-            string orderList = _joinOrderHandler.ListAllOrder(SERVER_ID);
-            Assert.AreEqual("1  測試團購一\n2  測試團購二", orderList);
+            List<GroupBuying> orderList = _joinOrderHandler.ListAllOrder(SERVER_ID);
+            for(int i = 0; i < orderList.Count; i++)
+            {
+                var order = orderList[i];
+                Assert.AreEqual(i+1, order.getGroupbuyingID());
+                Assert.AreEqual("測試團購 " + (i + 1).ToString(), order.getGroupbuyingName());
+            }
         }
 
         [TestMethod()]

@@ -6,5 +6,6 @@ namespace groupOrdering.Boundary
     {
         Store GetStore(string storeID, string serverID);
         List<Store> ListStores(string serverID);
+        public List<StoreItem> ListItemsOfStore(string storeID);
     }
 }
