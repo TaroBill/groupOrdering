@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static groupOrdering.Technical.DTO;
 
 namespace groupOrdering.UI
 {
@@ -106,80 +105,6 @@ namespace groupOrdering.UI
                     else
                     {
                         message.Channel.SendMessageAsync("尚未設定團購結束時間");
-                    }
-                    break;
-                case "ListAllOrder":
-                    //TODO serverID被固定住
-                    serverID = "test";
-                    List<GroupBuyingDTO> groupBuyingData = _app.GetJoinOrderHandler().ListAllOrder(serverID);
-                    string output = "團購編號\t店家編號\t團購店家名稱\n";
-                    for(int i = 0; i < groupBuyingData.Count; i++)
-                    {
-                        output += $"{groupBuyingData[i].groupbuyingID}\t{groupBuyingData[i].storeID}\t{groupBuyingData[i].groupbuyingName}\n";
-                    }
-                    message.Channel.SendMessageAsync(output);
-                    break;
-                case "ListItemOfStore":
-                    //TODO serverID被固定住
-                    serverID = "test";
-                    List<StoreItem> storeItems = _app.GetJoinOrderHandler().ListItemsOfStore(words[1], serverID);
-                    output = "餐點編號\t餐點名稱\t餐點價格\n";
-                    for (int i = 0; i < storeItems.Count; i++)
-                    {
-                        output += $"{storeItems[i].storeitemID}\t{storeItems[i].storeitemName}\t{storeItems[i].storeitemPrice}元\n";
-                    }
-                    message.Channel.SendMessageAsync(output);
-                    break;
-                case "JoinOrder":
-                    //TODO serverID被固定住
-                    serverID = "test";
-                    if (_app.GetJoinOrderHandler().JoinOrder(serverID, words[1], user))
-                    {
-                        message.Channel.SendMessageAsync($"已加入團購 {words[2]}");
-                    }
-                    else
-                    {
-                        message.Channel.SendMessageAsync("加入團購失敗");
-                    }
-                    break;
-                case "AddItem":
-                    if (_app.GetJoinOrderHandler().AddItem(user, words[1], Int32.Parse(words[2])))
-                    {
-                        message.Channel.SendMessageAsync("新增餐點成功");
-                    }
-                    else
-                    {
-                        message.Channel.SendMessageAsync("新增餐點失敗");
-                    }
-                    break;
-                case "EditItem":
-                    if (_app.GetJoinOrderHandler().EditItem(user, words[1], Int32.Parse(words[2])))
-                    {
-                        message.Channel.SendMessageAsync("修改餐點成功");
-                    }
-                    else
-                    {
-                        message.Channel.SendMessageAsync("修改餐點失敗");
-                    }
-                    break;
-                case "DeleteItem":
-                    if (_app.GetJoinOrderHandler().DeleteItem(user, words[1]))
-                    {
-                        message.Channel.SendMessageAsync("刪除餐點成功");
-                    }
-                    else
-                    {
-                        message.Channel.SendMessageAsync("刪除餐點失敗");
-                    }
-                    break;
-                case "SubmitOrder":
-                    if (_app.GetJoinOrderHandler().CheckValid(user))
-                    {
-                        message.Channel.SendMessageAsync($"已完成團購點餐\n總共花費:{_app.GetJoinOrderHandler().SubmitOrder(user)}元");
-                    }
-                    else
-                    {
-                        message.Channel.SendMessageAsync("請先加入團購");
                     }
                     break;
                 default:

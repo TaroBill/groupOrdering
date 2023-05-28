@@ -12,27 +12,22 @@ namespace groupOrdering.Domain
     {
         public string GroupBuyingID { get; set; }
 
-        private string groupbuyingName;
+        private string _name;
         private Store _store;
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
         private string _serverID;
         private DateTime _endTime;
-        private MemberOrder _membersOrders;
+        private List<MemberOrder> _membersOrders;
 
         private void InitGroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID = "0", string name = "", string serverID = "")
         {
             GroupBuyingID = groupBuyingID;
             _groupBuyingsBoundary = boundary;
-            groupbuyingName = name;
+            _name = name;
             _serverID = serverID;
-            _membersOrders = new MemberOrder();
+            _membersOrders = new List<MemberOrder>();
             _store = new Store();
             _endTime = DateTime.Today;
-        }
-
-        public GroupBuying()
-        {
-
         }
 
         public GroupBuying(IGroupBuyingsBoundary boundary)
@@ -51,19 +46,9 @@ namespace groupOrdering.Domain
             _endTime = endTime;
         }
 
-        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID, string serverID)
+        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID)
         {
-            InitGroupBuying(boundary, groupBuyingID, "", serverID);
-        }
-
-        public string getGroupbuyingName()
-        {
-            return this.groupbuyingName;
-        }
-
-        public string getGroupbuyingID()
-        {
-            return this.GroupBuyingID;
+            throw new NotImplementedException();
         }
 
         public Store GetStore()
@@ -79,11 +64,6 @@ namespace groupOrdering.Domain
         public DateTime GetEndTime()
         {
             return _endTime;
-        }
-
-        public string getStoreIDByGroupbuyingID(string groupbuyingID)
-        {
-            return _groupBuyingsBoundary.getStoreIDByGroupbuyingID(groupbuyingID).StoreID;
         }
 
         public void ChooseExistStore(string storeID, string serverID)
@@ -117,29 +97,14 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public List<StoreItem> ListItemsOfStore()
+        public void ListItemsOfStore()
         {
-            return _store.ListItemsOfStore();
+            throw new NotImplementedException();
         }
 
-        public void AddItem(string itemID, int quantity)
+        public void AddItem(User user, string itemID, int quantity)
         {
-            _membersOrders.AddItem(itemID, quantity);
-        }
-
-        public void EditItem(string itemID, int quantity)
-        {
-            _membersOrders.EditItem(itemID, quantity);
-        }
-
-        public void DeleteItem(User user, string itemID)
-        {
-            _membersOrders.DeleteItem(user, GroupBuyingID, itemID);
-        }
-
-        public int SubmitOrder(User user)
-        {
-            return _membersOrders.SubmitOrder(user, GroupBuyingID);
+            throw new NotImplementedException();
         }
 
         public int GetTotalPrice()

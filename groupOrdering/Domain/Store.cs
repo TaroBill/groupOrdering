@@ -61,9 +61,9 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public List<StoreItem> ListItemsOfStore()
+        public List<string> ListItemsOfStore()
         {
-            return _storesBoundary.ListItemsOfStore(StoreID);
+            throw new NotImplementedException();
         }
     }
 }

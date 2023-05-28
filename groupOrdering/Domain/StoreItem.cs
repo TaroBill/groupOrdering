@@ -8,20 +8,13 @@ namespace groupOrdering.Domain
 {
     public class StoreItem
     {
-        public string storeitemID { get; set; }
-        public string storeitemName { get; set; }
-        public int storeitemPrice { get; set; }
+        public string ItemID { get; set; }
+        public string ItemName { get; set; }
+        public int Price { get; set; }
 
-        public StoreItem()
+        public StoreItem(string itemID, string itemName, int price)
         {
-
-        }
-
-        public StoreItem(string storeitemID, string storeitemName, int storeitemPrice)
-        {
-            this.storeitemID = storeitemID;
-            this.storeitemName = storeitemName;
-            this.storeitemPrice = storeitemPrice;
+            throw new NotImplementedException();
         }
     }
 }
