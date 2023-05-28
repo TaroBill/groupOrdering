@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static groupOrdering.Technical.DTO;
 
 namespace groupOrdering.UI
 {
@@ -111,11 +110,11 @@ namespace groupOrdering.UI
                 case "ListAllOrder":
                     //TODO serverID被固定住
                     serverID = "test";
-                    List<GroupBuyingDTO> groupBuyingData = _app.GetJoinOrderHandler().ListAllOrder(serverID);
+                    List<GroupBuying> groupBuyingData = _app.GetJoinOrderHandler().ListAllOrder(serverID);
                     string output = "團購編號\t店家編號\t團購店家名稱\n";
                     for(int i = 0; i < groupBuyingData.Count; i++)
                     {
-                        output += $"{groupBuyingData[i].groupbuyingID}\t{groupBuyingData[i].storeID}\t{groupBuyingData[i].groupbuyingName}\n";
+                        output += $"{groupBuyingData[i].GroupBuyingID}\t{groupBuyingData[i].storeID}\t{groupBuyingData[i].getGroupbuyingName()}\n";
                     }
                     message.Channel.SendMessageAsync(output);
                     break;

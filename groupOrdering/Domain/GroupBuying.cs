@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static groupOrdering.Technical.DTO;
 
 namespace groupOrdering.Domain
 {
     public class GroupBuying
     {
         public string GroupBuyingID { get; set; }
-
+        public string storeID { get; set; }
         private string groupbuyingName;
         private Store _store;
         private IGroupBuyingsBoundary _groupBuyingsBoundary;

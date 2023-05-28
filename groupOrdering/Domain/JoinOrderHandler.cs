@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
-using static groupOrdering.Technical.DTO;
 
 namespace groupOrdering.Domain
 {
@@ -35,7 +34,7 @@ namespace groupOrdering.Domain
             _groupBuyingsBoundary = boundary;
         }
 
-        public List<GroupBuyingDTO> ListAllOrder(string serverID)
+        public List<GroupBuying> ListAllOrder(string serverID)
         {
             return GroupBuyings.ListAllOrders(serverID);
         }
