@@ -29,8 +29,6 @@ namespace groupOrdering.UI
 
             _createOrderUI = new CreateOrderUI(_client, _app);
 
-            _client.MessageReceived += CommandHandler;
-
             _client.Log += Log;
 
             var token = File.ReadAllText("token.txt");
@@ -44,11 +42,6 @@ namespace groupOrdering.UI
         private Task Log(LogMessage msg)
         {
             Console.WriteLine(msg.ToString());
-            return Task.CompletedTask;
-        }
-
-        private Task CommandHandler(SocketMessage message)
-        {
             return Task.CompletedTask;
         }
     }

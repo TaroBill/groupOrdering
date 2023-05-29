@@ -182,11 +182,11 @@ namespace groupOrdering.UI
             var modalBuilder = new ModalBuilder()
                 .WithTitle("請選擇截止時間")
                 .WithCustomId(END_TIME_MODAL_ID)
-                .AddTextInput("Year", "year", placeholder: "yyyy", required: true, maxLength: 4)
-                .AddTextInput("Month", "month", placeholder: "MM", required: true, maxLength: 2)
-                .AddTextInput("Day", "day", placeholder: "dd", required: true, maxLength: 2)
-                .AddTextInput("Hour", "hour", placeholder: "hh", required: true, maxLength: 2)
-                .AddTextInput("Minutes", "minutes", placeholder: "mm", required: true, maxLength: 2);
+                .AddTextInput("Year", "year", placeholder: "yyyy", required: true, maxLength: 4, minLength: 1)
+                .AddTextInput("Month", "month", placeholder: "MM", required: true, maxLength: 2, minLength: 1)
+                .AddTextInput("Day", "day", placeholder: "dd", required: true, maxLength: 2, minLength: 1)
+                .AddTextInput("Hour", "hour", placeholder: "hh", required: true, maxLength: 2, minLength: 1)
+                .AddTextInput("Minutes", "minutes", placeholder: "mm", required: true, maxLength: 2, minLength: 1);
             return modalBuilder.Build();
         }
 
