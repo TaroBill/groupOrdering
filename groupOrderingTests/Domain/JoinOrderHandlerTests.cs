@@ -79,14 +79,26 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ListItemsOfStoreTest()
         {
-            string itemsList = _joinOrderHandler.ListItemsOfStore("3", SERVER_ID);
-            Assert.AreEqual("", itemsList);
+            List<StoreItem> itemsList = _joinOrderHandler.ListItemsOfStore("3", SERVER_ID);
+            Assert.AreEqual(0, itemsList.Count);
 
+            int [] price = new int[2] {30, 11};
+            string[] name = new string[2] { "御飯糰", "茶葉蛋" };
             itemsList = _joinOrderHandler.ListItemsOfStore("1", SERVER_ID);
-            Assert.AreEqual("1  御飯糰  30元\n2  茶葉蛋  11元", itemsList);
+            for (int i=0;i<itemsList.Count;i++)
+            {
+                Assert.AreEqual(name[i], itemsList[i].storeitemName);
+                Assert.AreEqual(price[i], itemsList[i].storeitemPrice);
+            }
 
             itemsList = _joinOrderHandler.ListItemsOfStore("2", SERVER_ID);
-            Assert.AreEqual("1  香蕉  30元\n2  御茶園  25元\n3  脆迪酥  100元", itemsList);
+            price = new int[3] { 30, 25, 100 };
+            name = new string[3] { "香蕉", "御茶園", "脆迪酥" };
+            for (int i = 0; i < itemsList.Count; i++)
+            {
+                Assert.AreEqual(name[i], itemsList[i].storeitemName);
+                Assert.AreEqual(price[i], itemsList[i].storeitemPrice);
+            }
         }
 
         [TestMethod()]
