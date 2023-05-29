@@ -32,23 +32,20 @@ namespace groupOrdering.Domain
             return _CreateOrderProcess[user.UserID];
         }
 
-        public void CreateGroupBuying(User user)
+        public void CreateGroupBuying(User user, string name, string serverID)
         {
             if (!_CreateOrderProcess.ContainsKey(user.UserID))
             {
-                _CreateOrderProcess.Add(user.UserID, new GroupBuying(_groupBuyingsBoundary));
+                _CreateOrderProcess.Add(user.UserID, new GroupBuying(_groupBuyingsBoundary, name, serverID));
             }
         }
 
-        public string ListStore(string serverID)
+        public List<Store> ListStore(string serverID)
         {
-            string stores = "";
+            if (serverID == string.Empty)
+                return new List<Store>();
             List<Store> list = Stores.ListStores(serverID);
-            foreach (Store store in list)
-            {
-                stores += $"{store.StoreID}  {store.StoreName}\n";
-            }
-            return stores;
+            return list;
         }
 
         public void ChooseExistStore(User user, string storeID, string serverID)

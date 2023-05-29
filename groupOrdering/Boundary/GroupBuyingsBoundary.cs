@@ -31,9 +31,9 @@ namespace groupOrdering.Boundary
                                         $"WHERE groupbuying.serverID='{serverID}';");
         }
 
-        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID)
+        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID, string groupBuyingName)
         {
-            return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}');");
+            return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID, groupbuyingName) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}', '{groupBuyingName}');");
         }
 
         public GroupBuying GetGroupBuyingByGroupID(string groupbuyingID)
