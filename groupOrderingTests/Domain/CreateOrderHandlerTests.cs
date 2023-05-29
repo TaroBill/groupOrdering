@@ -32,7 +32,7 @@ namespace groupOrdering.Domain.Tests
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購一", "test"),
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "測試團購二", "test")
             });
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester")).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying("1", "test", DateTime.Today, "Tester", "團購1")).Returns(1);
             _createOrderHandler.SetGroupBuyingsBoundary(mockGroupBuyingsBoundary.Object);
         }
 
@@ -44,7 +44,7 @@ namespace groupOrdering.Domain.Tests
             GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user,"", SERVER_ID);
             groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
         }
@@ -52,8 +52,8 @@ namespace groupOrdering.Domain.Tests
         [TestMethod()]
         public void ListStoreTest()
         {
-            string storeList = _createOrderHandler.ListStore(SERVER_ID);
-            Assert.AreNotEqual("", storeList);
+            List<Store> storeList = _createOrderHandler.ListStore(SERVER_ID);
+            Assert.IsTrue(storeList.Any());
         }
 
         [TestMethod()]
@@ -63,7 +63,7 @@ namespace groupOrdering.Domain.Tests
             GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user, "", SERVER_ID);
             _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
             groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
@@ -79,7 +79,7 @@ namespace groupOrdering.Domain.Tests
             GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user, "", SERVER_ID);
             _createOrderHandler.SetEndTime(_user, time);
             groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
@@ -93,7 +93,7 @@ namespace groupOrdering.Domain.Tests
             GroupBuying? groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNull(groupBuying);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user, "", SERVER_ID);
             groupBuying = _createOrderHandler.GetGroupBuying(_user);
             Assert.IsNotNull(groupBuying);
 
@@ -109,7 +109,7 @@ namespace groupOrdering.Domain.Tests
             bool startedOrder = _createOrderHandler.CheckStartOrder(_user);
             Assert.IsFalse(startedOrder);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user, "", SERVER_ID);
             startedOrder = _createOrderHandler.CheckStartOrder(_user);
             Assert.IsTrue(startedOrder);
         }
@@ -120,7 +120,7 @@ namespace groupOrdering.Domain.Tests
             bool chosenStore = _createOrderHandler.CheckChooseStore(_user);
             Assert.IsFalse(chosenStore);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user, "", SERVER_ID);
             chosenStore = _createOrderHandler.CheckChooseStore(_user);
             Assert.IsFalse(chosenStore);
 
@@ -141,7 +141,7 @@ namespace groupOrdering.Domain.Tests
             checkEndTime = _createOrderHandler.CheckEndTime(dateTime);
             Assert.IsFalse(checkEndTime);
 
-            dateTime.AddDays(10);
+            dateTime = dateTime.AddDays(10);
             checkEndTime = _createOrderHandler.CheckEndTime(dateTime);
             Assert.IsTrue(checkEndTime);
         }
@@ -152,12 +152,13 @@ namespace groupOrdering.Domain.Tests
             bool result = _createOrderHandler.CheckEndTimeValid(_user);
             Assert.IsFalse(result);
 
-            _createOrderHandler.CreateGroupBuying(_user);
+            _createOrderHandler.CreateGroupBuying(_user, "", SERVER_ID);
             result = _createOrderHandler.CheckEndTimeValid(_user);
             Assert.IsFalse(result);
 
             _createOrderHandler.ChooseExistStore(_user, STORE_ID, SERVER_ID);
             _createOrderHandler.SetEndTime(_user, DateTime.Now.AddDays(10));
+            result = _createOrderHandler.CheckEndTimeValid(_user);
             Assert.IsTrue(result);
         }
     }
