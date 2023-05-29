@@ -42,9 +42,15 @@ namespace groupOrdering.Domain
             this._storesBoundary = storesBoundary;
         }
 
+        public StoreItem GetStoreItem(string storeitemID)
+        {
+            return _items.FirstOrDefault(x => x.storeitemID == storeitemID, new StoreItem());
+        }
+
         public void SetStore(string storeID, string serverID)
         {
             Store store = _storesBoundary.GetStore(storeID, serverID);
+            _items = _storesBoundary.ListItemsOfStore(storeID);
             this.StoreID = store.StoreID;
             this.StoreName = store.StoreName;
             this.StoreAddress = store.StoreAddress;
@@ -53,7 +59,17 @@ namespace groupOrdering.Domain
 
         public void AddStoreItem(string itemName, int price)
         {
-            throw new NotImplementedException();
+            StoreItem item = new StoreItem(itemName, price);
+            _items.Add(item);
+        }
+
+        /// <summary>
+        /// 專門給test case使用
+        /// </summary>
+        /// <param name="item"></param>
+        public void AddStoreItem(StoreItem item)
+        {
+            _items.Add(item);
         }
 
         public void EndBuildStore(User user)

@@ -9,7 +9,7 @@ namespace groupOrdering.Boundary
 {
     public interface IMemberOrderBoundary
     {
-        public void DeleteItem(User user, string groupbuyingID, string itemID);
-        public bool SubmitOrder(User user, string groupbuyingID, string itemID, int quantity);
+        public void DeleteItems(User user, string groupbuyingID);
+        public bool SubmitItem(User user, string groupbuyingID, string itemID, int quantity);
     }
 }

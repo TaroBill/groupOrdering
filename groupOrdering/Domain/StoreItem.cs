@@ -17,6 +17,12 @@ namespace groupOrdering.Domain
 
         }
 
+        public StoreItem(string storeitemName, int storeitemPrice)
+        {
+            this.storeitemName = storeitemName;
+            this.storeitemPrice = storeitemPrice;
+        }
+
         public StoreItem(string storeitemID, string storeitemName, int storeitemPrice)
         {
             this.storeitemID = storeitemID;

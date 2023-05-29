@@ -1,4 +1,5 @@
-﻿using groupOrdering.Boundary;
+﻿using Discord;
+using groupOrdering.Boundary;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,27 +12,34 @@ namespace groupOrdering.Domain
     {
         public string GroupBuyingID { get; set; }
         public string storeID { get; set; }
-        private string groupbuyingName;
+        public string GroupbuyingName { get; set; }
         private Store _store;
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
         private string _serverID;
         private DateTime _endTime;
-        private MemberOrder _membersOrders;
+        private Dictionary<string, MemberOrder> _membersOrders;
 
         private void InitGroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID = "0", string name = "", string serverID = "")
         {
             GroupBuyingID = groupBuyingID;
             _groupBuyingsBoundary = boundary;
-            groupbuyingName = name;
+            GroupbuyingName = name;
             _serverID = serverID;
-            _membersOrders = new MemberOrder();
-            _store = new Store();
+            _membersOrders = new Dictionary<string, MemberOrder>();
             _endTime = DateTime.Today;
+            if (groupBuyingID=="0")
+            {
+                _store = new Store();
+            }
+            else
+            {
+                _store = _groupBuyingsBoundary.GetStoreByGroupbuyingID(groupBuyingID);
+            }
         }
 
         public GroupBuying()
         {
-
+            
         }
 
         public GroupBuying(IGroupBuyingsBoundary boundary)
@@ -52,17 +60,12 @@ namespace groupOrdering.Domain
 
         public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID, string serverID)
         {
-            InitGroupBuying(boundary, groupBuyingID, "", serverID);
-        }
-
-        public string getGroupbuyingName()
-        {
-            return this.groupbuyingName;
-        }
-
-        public string getGroupbuyingID()
-        {
-            return this.GroupBuyingID;
+            GroupBuying group = boundary.GetGroupBuyingByGroupID(groupBuyingID);
+            if (group.GroupBuyingID=="0")
+            {
+                throw new NullReferenceException("groupbuying not exist");
+            }
+            InitGroupBuying(boundary, groupBuyingID, group.GroupbuyingName, serverID);
         }
 
         public Store GetStore()
@@ -78,11 +81,6 @@ namespace groupOrdering.Domain
         public DateTime GetEndTime()
         {
             return _endTime;
-        }
-
-        public string getStoreIDByGroupbuyingID(string groupbuyingID)
-        {
-            return _groupBuyingsBoundary.getStoreIDByGroupbuyingID(groupbuyingID).StoreID;
         }
 
         public void ChooseExistStore(string storeID, string serverID)
@@ -116,29 +114,37 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public List<StoreItem> ListItemsOfStore()
+        public void JoinOrder(User user)
         {
-            return _store.ListItemsOfStore();
+            _membersOrders.Add(user.UserID, new MemberOrder());
         }
 
-        public void AddItem(string itemID, int quantity)
+        public void AddItem(User user, string itemID, int quantity)
         {
-            _membersOrders.AddItem(itemID, quantity);
+            StoreItem storeItem = _store.GetStoreItem(itemID);
+            _membersOrders[user.UserID].AddItem(storeItem, quantity);
         }
 
-        public void EditItem(string itemID, int quantity)
+        public void EditItem(User user, string itemID, int quantity)
         {
-            _membersOrders.EditItem(itemID, quantity);
+            StoreItem storeItem = _store.GetStoreItem(itemID);
+            _membersOrders[user.UserID].EditItem(storeItem, quantity);
         }
 
         public void DeleteItem(User user, string itemID)
         {
-            _membersOrders.DeleteItem(user, GroupBuyingID, itemID);
+            StoreItem storeItem = _store.GetStoreItem(itemID);
+            _membersOrders[user.UserID].DeleteItem(storeItem);
         }
 
-        public int SubmitOrder(User user)
+        public bool SubmitOrder(User user)
         {
-            return _membersOrders.SubmitOrder(user, GroupBuyingID);
+            return _membersOrders[user.UserID].SubmitOrder(user, GroupBuyingID);
+        }
+
+        public int GetTotal(User user)
+        {
+            return _membersOrders[user.UserID].GetTotal();
         }
 
         public int GetTotalPrice()

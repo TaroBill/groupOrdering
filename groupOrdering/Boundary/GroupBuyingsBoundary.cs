@@ -17,7 +17,7 @@ namespace groupOrdering.Boundary
             _dao = new DAO();
         }
 
-        public Store getStoreIDByGroupbuyingID(string groupbuyingID)
+        public Store GetStoreByGroupbuyingID(string groupbuyingID)
         {
             return _dao.GetData<Store>($"SELECT * FROM groupordering.groupbuying " +
                                         $"WHERE groupbuying.groupbuyingID='{groupbuyingID}';").FirstOrDefault(new Store());
@@ -34,6 +34,12 @@ namespace groupOrdering.Boundary
         public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID)
         {
             return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}');");
+        }
+
+        public GroupBuying GetGroupBuyingByGroupID(string groupbuyingID)
+        {
+            return _dao.GetData<GroupBuying>(@$"SELECT * FROM groupordering.memberorder 
+                                                WHERE groupbuyingID='{groupbuyingID}';").FirstOrDefault(new GroupBuying());
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.WebSocket;
+using groupOrdering.Boundary;
 using groupOrdering.Domain;
 using System;
 using System.Collections.Generic;
@@ -114,14 +115,14 @@ namespace groupOrdering.UI
                     string output = "團購編號\t店家編號\t團購店家名稱\n";
                     for(int i = 0; i < groupBuyingData.Count; i++)
                     {
-                        output += $"{groupBuyingData[i].GroupBuyingID}\t{groupBuyingData[i].storeID}\t{groupBuyingData[i].getGroupbuyingName()}\n";
+                        output += $"{groupBuyingData[i].GroupBuyingID}\t{groupBuyingData[i].storeID}\t{groupBuyingData[i].GroupbuyingName}\n";
                     }
                     message.Channel.SendMessageAsync(output);
                     break;
                 case "ListItemOfStore":
                     //TODO serverID被固定住
                     serverID = "test";
-                    List<StoreItem> storeItems = _app.GetJoinOrderHandler().ListItemsOfStore(words[1], serverID);
+                    List<StoreItem> storeItems = _app.GetJoinOrderHandler().ListItemsOfStore(words[1], serverID, new StoresBoundary());
                     output = "餐點編號\t餐點名稱\t餐點價格\n";
                     for (int i = 0; i < storeItems.Count; i++)
                     {
@@ -172,13 +173,16 @@ namespace groupOrdering.UI
                     }
                     break;
                 case "SubmitOrder":
-                    if (_app.GetJoinOrderHandler().CheckValid(user))
-                    {
-                        message.Channel.SendMessageAsync($"已完成團購點餐\n總共花費:{_app.GetJoinOrderHandler().SubmitOrder(user)}元");
-                    }
-                    else
+                    if (!_app.GetJoinOrderHandler().CheckValid(user))
                     {
                         message.Channel.SendMessageAsync("請先加入團購");
+                        break;
+                    }
+                    message.Channel.SendMessageAsync($"已完成團購點餐\n總共花費:{_app.GetJoinOrderHandler().GetTotal(user)}元");
+                    if (!_app.GetJoinOrderHandler().SubmitOrder(user))
+                    {
+                        message.Channel.SendMessageAsync("送出訂單失敗");
+                        break;
                     }
                     break;
                 default:

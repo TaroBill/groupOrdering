@@ -44,6 +44,7 @@ namespace groupOrdering.Domain
             try
             {
                 _joinOrderProcess[user.UserID] = new GroupBuying(_groupBuyingsBoundary, groupBuyingID, serverID);
+                _joinOrderProcess[user.UserID].JoinOrder(user);
                 return true;
             }
             catch(Exception ex)
@@ -52,60 +53,90 @@ namespace groupOrdering.Domain
             }
         }
 
-        public List<StoreItem> ListItemsOfStore(string groupBuyingID, string serverID)
+        public List<StoreItem> ListItemsOfStore(string storeID, string serverID, IStoresBoundary storesBoundary)
         {
-            _joinOrderProcess.Add("test", new GroupBuying(_groupBuyingsBoundary));
-            string storeID = _joinOrderProcess["test"].getStoreIDByGroupbuyingID(groupBuyingID);
-            _joinOrderProcess["test"].ChooseExistStore(storeID, serverID);
-            List<StoreItem> storeItems = _joinOrderProcess["test"].ListItemsOfStore();
-            _joinOrderProcess.Remove("test");
-            return storeItems;
+            Store store = new Store();
+            store.SetStoresBoundary(storesBoundary);
+            store.SetStore(storeID, serverID);
+            return store.ListItemsOfStore();
+        }
+
+        private bool IsContainItem(string itemID, List<StoreItem> storeItems)
+        {
+            foreach (StoreItem item in storeItems)
+            {
+                if (item.storeitemID == itemID)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public bool AddItem(User user, string itemID, int quantity)
         {
-            if (_joinOrderProcess.ContainsKey(user.UserID))
-            {
-                _joinOrderProcess[user.UserID].AddItem(itemID, quantity);
-                return true;
-            }
-            else
+            if (!_joinOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
+            List<StoreItem> storeitems = _joinOrderProcess[user.UserID].GetStore().ListItemsOfStore();
+            if (!IsContainItem(itemID, storeitems))
+            {
+                return false;
+            }
+            _joinOrderProcess[user.UserID].AddItem(user, itemID, quantity);
+            return true;
         }
 
         public bool EditItem(User user, string itemID, int quantity)
         {
-            if (_joinOrderProcess.ContainsKey(user.UserID))
-            {
-                _joinOrderProcess[user.UserID].EditItem(itemID, quantity);
-                return true;
-            }
-            else
+            if (!_joinOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
+            List<StoreItem> storeitems = _joinOrderProcess[user.UserID].GetStore().ListItemsOfStore();
+            if (!IsContainItem(itemID, storeitems))
+            {
+                return false;
+            }
+            _joinOrderProcess[user.UserID].EditItem(user, itemID, quantity);
+            return true;
         }
 
         public bool DeleteItem(User user, string itemID)
         {
-            if (_joinOrderProcess.ContainsKey(user.UserID))
-            {
-                _joinOrderProcess[user.UserID].DeleteItem(user, itemID);
-                return true;
-            }
-            else
+            if (!_joinOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
+            List<StoreItem> storeitems = _joinOrderProcess[user.UserID].GetStore().ListItemsOfStore();
+            if (!IsContainItem(itemID, storeitems))
+            {
+                return false;
+            }
+            _joinOrderProcess[user.UserID].DeleteItem(user, itemID);
+            return true;
         }
 
-        public int SubmitOrder(User user)
+        public bool SubmitOrder(User user)
         {
-            int totalPrice = _joinOrderProcess[user.UserID].SubmitOrder(user);
+            if (!_joinOrderProcess.ContainsKey(user.UserID))
+            {
+                return false;
+            }
+            bool isSuccess = _joinOrderProcess[user.UserID].SubmitOrder(user);
             _joinOrderProcess.Remove(user.UserID);
-            return totalPrice;
+            return isSuccess;
+        }
+
+        public int GetTotal(User user)
+        {
+            if (!_joinOrderProcess.ContainsKey(user.UserID))
+            {
+                return 0;
+            }
+            int total = _joinOrderProcess[user.UserID].GetTotal(user);
+            return total;
         }
 
         public bool CheckValid(User user)

@@ -13,22 +13,30 @@ namespace groupOrdering.Domain
     {
         private Dictionary<StoreItem, int> _items;
         private MemberOrderBoundary _memberorderboundary;
-        private StoreItemBoundary _storeitemboundary;
+        private StoresBoundary _storesboundary;
 
         public MemberOrder()
         {
             _items = new Dictionary<StoreItem, int>();
             _memberorderboundary = new MemberOrderBoundary();
-            _storeitemboundary = new StoreItemBoundary();
+            _storesboundary = new StoresBoundary();
         }
 
-        public int SubmitOrder(User user, string groupbuyingID)
+        public bool SubmitOrder(User user, string groupbuyingID)
         {
-            foreach(var pair in _items)
+            try
             {
-                _memberorderboundary.SubmitOrder(user, groupbuyingID, pair.Key.storeitemID, pair.Value);
-            }            
-            return GetTotal();
+                _memberorderboundary.DeleteItems(user, groupbuyingID);
+                foreach (var pair in _items)
+                {
+                    _memberorderboundary.SubmitItem(user, groupbuyingID, pair.Key.storeitemID, pair.Value);
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void CalculateDebt()
@@ -47,43 +55,20 @@ namespace groupOrdering.Domain
             return total;
         }
 
-        public void AddItem(string itemID, int quantity)
+        public void AddItem(StoreItem item, int quantity)
         {
-            foreach (var pair in _items)
-            {
-                if (pair.Key.storeitemID == itemID)
-                {
-                    _items[pair.Key] += quantity;
-                    return;
-                }
-            }
-            StoreItem storeItem = _storeitemboundary.getStoreItem(itemID);
-            _items.Add(storeItem, quantity);
+            _items[item] = _items.GetValueOrDefault(item, 0);
+            _items[item] += quantity;
         }
 
-        public void EditItem(string itemID, int quantity)
+        public void EditItem(StoreItem item, int quantity)
         {
-            foreach (var pair in _items)
-            {
-                if (pair.Key.storeitemID == itemID)
-                {
-                    _items[pair.Key] = quantity;
-                    return;
-                }
-            }
+            AddItem(item, quantity);
         }
 
-        public void DeleteItem(User user, string groupbuyingID, string itemID)
+        public void DeleteItem(StoreItem item)
         {
-            foreach (var pair in _items)
-            {
-                if (pair.Key.storeitemID == itemID)
-                {
-                    _items.Remove(pair.Key);
-                    return;
-                }
-            }
-            _memberorderboundary.DeleteItem(user, groupbuyingID, itemID);
+            _items.Remove(item);
         }
     }
 }
