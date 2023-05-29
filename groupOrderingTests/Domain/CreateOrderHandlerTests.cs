@@ -32,7 +32,7 @@ namespace groupOrdering.Domain.Tests
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "1", "測試團購一", SERVER_ID),
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "2", "測試團購二", SERVER_ID)
             });
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID)).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID, "")).Returns(1);
             _createOrderHandler.SetGroupBuyingsBoundary(mockGroupBuyingsBoundary.Object);
         }
 

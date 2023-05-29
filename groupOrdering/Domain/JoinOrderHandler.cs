@@ -43,7 +43,7 @@ namespace groupOrdering.Domain
         {
             try
             {
-                _joinOrderProcess[user.UserID] = new GroupBuying(_groupBuyingsBoundary, groupBuyingID, serverID);
+                _joinOrderProcess[user.UserID] = new GroupBuying(_groupBuyingsBoundary, groupBuyingID);
                 _joinOrderProcess[user.UserID].JoinOrder(user);
                 return true;
             }

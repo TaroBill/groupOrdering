@@ -58,14 +58,19 @@ namespace groupOrdering.Domain
             _endTime = endTime;
         }
 
-        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID, string serverID)
+        public GroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID)
         {
             GroupBuying group = boundary.GetGroupBuyingByGroupID(groupBuyingID);
             if (group.GroupBuyingID=="0")
             {
                 throw new NullReferenceException("groupbuying not exist");
             }
-            InitGroupBuying(boundary, groupBuyingID, group.GroupbuyingName, serverID);
+            InitGroupBuying(boundary, groupBuyingID, group.GroupbuyingName, group._serverID);
+        }
+
+        public GroupBuying(IGroupBuyingsBoundary boundary, string name, string serverID)
+        {
+            InitGroupBuying(boundary, "0", name, serverID);
         }
 
         public Store GetStore()
@@ -96,7 +101,7 @@ namespace groupOrdering.Domain
 
         public void PublishGroupBuying(User user)
         {
-            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, _name);
+            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, GroupbuyingName);
         }
 
         public void SetGroupBuying(User user)

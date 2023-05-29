@@ -34,7 +34,7 @@ namespace groupOrdering.Domain.Tests
                 groupBuying1,
                 groupBuying2
             });
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID)).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID, "")).Returns(1);
             _groupBuying = new GroupBuying(mockGroupBuyingsBoundary.Object);
         }
 

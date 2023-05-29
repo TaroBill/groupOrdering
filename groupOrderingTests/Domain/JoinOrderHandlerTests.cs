@@ -68,7 +68,7 @@ namespace groupOrdering.Domain.Tests
             });
             mockGroupBuyingsBoundary.Setup(p => p.GetStoreByGroupbuyingID("1")).Returns(store1);
             mockGroupBuyingsBoundary.Setup(p => p.GetStoreByGroupbuyingID("2")).Returns(store2);
-            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID)).Returns(1);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID, "")).Returns(1);
             mockGroupBuyingsBoundary.Setup(p => p.GetGroupBuyingByGroupID("1")).Returns(groupBuying1);
             mockGroupBuyingsBoundary.Setup(p => p.GetGroupBuyingByGroupID("2")).Returns(groupBuying2);
             _joinOrderHandler.SetGroupBuyingsBoundary(mockGroupBuyingsBoundary.Object);

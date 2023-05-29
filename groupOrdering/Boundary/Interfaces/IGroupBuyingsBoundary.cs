@@ -6,7 +6,7 @@ namespace groupOrdering.Boundary
     {
         List<GroupBuying> ListAllOrders(string serverID);
         public Store GetStoreByGroupbuyingID(string groupbuyingID);
-        int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID);
+        int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID, string name);
         public GroupBuying GetGroupBuyingByGroupID(string groupbuyingID);
     }
 }
