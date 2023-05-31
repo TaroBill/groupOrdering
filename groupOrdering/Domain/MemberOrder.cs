@@ -50,7 +50,6 @@ namespace groupOrdering.Domain
             foreach(var pair in _items)
             {
                 total += pair.Key.storeitemPrice * pair.Value;
-                Console.WriteLine($"{pair.Key.storeitemPrice}, {pair.Value}, {total}");
             }
             return total;
         }

@@ -5,6 +5,7 @@ using groupOrdering.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace groupOrdering.UI
         private DiscordSocketClient _client;
         private GroupBuyingApp _app;
         private CreateOrderUI _createOrderUI;
+        private JoinOrderUI _joinOrderUI;
 
         public async Task MainAsync()
         {
@@ -29,6 +31,7 @@ namespace groupOrdering.UI
             _client = new DiscordSocketClient(cinfig);
 
             _createOrderUI = new CreateOrderUI(_client, _app);
+            _joinOrderUI = new JoinOrderUI(_client, _app);
 
             _client.Log += Log;
 

@@ -37,6 +37,11 @@ namespace groupOrdering.Domain
             InitStore(storeID, storeName, storeAddress, storePhoneNumber);
         }
 
+        public void setItems(List<StoreItem> storeItems)
+        {
+            _items = storeItems;
+        }
+
         public void SetStoresBoundary(IStoresBoundary storesBoundary)
         {
             this._storesBoundary = storesBoundary;

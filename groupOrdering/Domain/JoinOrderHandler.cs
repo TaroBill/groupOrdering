@@ -138,10 +138,5 @@ namespace groupOrdering.Domain
             int total = _joinOrderProcess[user.UserID].GetTotal(user);
             return total;
         }
-
-        public bool CheckValid(User user)
-        {
-            return _joinOrderProcess.ContainsKey(user.UserID);
-        }
     }
 }
