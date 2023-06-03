@@ -20,9 +20,7 @@ namespace groupOrdering.UI
     {
         private readonly DiscordSocketClient _client;
         private readonly GroupBuyingApp _app;
-        private Dictionary<string, JoinOrderUIData> _joinOrderUIData;
-
-        private const string TEST_SERVER_ID = "test";
+        private readonly Dictionary<string, JoinOrderUIData> _joinOrderUIData;
 
         private const string LIST_ALL_ORDER_COMMAND = "list-all-order";
         private const string LIST_ITEM_OF_STORE_COMMAND = "list-item-of-store";
@@ -38,7 +36,6 @@ namespace groupOrdering.UI
             _client = client;
             _app = app;
             _joinOrderUIData = new Dictionary<string, JoinOrderUIData>();
-
             _client.Ready += ListAllOrder_Ready;
             _client.Ready += ListItemOfStore_Ready;
             _client.Ready += JoinOrder_Ready;
@@ -119,8 +116,7 @@ namespace groupOrdering.UI
             if (command.Data.Name != LIST_ALL_ORDER_COMMAND)
                 return;
 
-            string serverID;
-            serverID = TEST_SERVER_ID;
+            string serverID = command.GuildId.ToString() ?? "";
 
             List<GroupBuying> groupBuyings = _app.GetJoinOrderHandler().ListAllOrder(serverID);
 
@@ -138,8 +134,7 @@ namespace groupOrdering.UI
             if (command.Data.Name != LIST_ITEM_OF_STORE_COMMAND)
                 return;
 
-            string serverID;
-            serverID = TEST_SERVER_ID;
+            string serverID = command.GuildId.ToString() ?? "";
 
             string storeID = string.Join(", ", command.Data.Options.First().Value);
             List<StoreItem> storeItems = _app.GetJoinOrderHandler().ListItemsOfStore(storeID, serverID, new StoresBoundary());
@@ -160,9 +155,7 @@ namespace groupOrdering.UI
 
             string userID = command.User.Id.ToString();
             User user = new User(userID);
-            string serverID;
-            serverID = TEST_SERVER_ID;
-
+            string serverID = command.GuildId.ToString() ?? "";
             string groupbuyingID = string.Join(", ", command.Data.Options.First().Value);
             if (!_app.GetJoinOrderHandler().JoinOrder(serverID, groupbuyingID, user))
             {
@@ -281,8 +274,6 @@ namespace groupOrdering.UI
                 return;
             string userID = messageComponent.User.Id.ToString();
             User user = new User(userID);
-            string serverID;
-            serverID = TEST_SERVER_ID;
             if (!_joinOrderUIData.ContainsKey(userID))
             {
                 await messageComponent.RespondAsync("尚未選擇操作模式");

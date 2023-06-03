@@ -20,8 +20,6 @@ namespace groupOrdering.UI
         private readonly DiscordSocketClient _client;
         private readonly GroupBuyingApp _app;
 
-        private const string TEST_SERVER_ID = "test";
-
         private const string CREATE_ORDER_COMMAND = "create-order";
         private const string END_TIME_MODAL_ID = "end-time-model";
         private const string END_TIME_BUTTON_ID = "end-time-button";
@@ -73,12 +71,7 @@ namespace groupOrdering.UI
 
             string userID = command.User.Id.ToString();
             User user = new User(userID);
-            string serverID;
-#if DEBUG
-            serverID = TEST_SERVER_ID;
-#else
-            serverID = command.ChannelId.ToString() ?? "";
-#endif
+            string serverID = command.GuildId.ToString() ?? "";
             string groupBuyingName = string.Join(", ", command.Data.Options.First().Value);
             _app.GetCreateOrderHandler().CreateGroupBuying(user, groupBuyingName, serverID);
 
@@ -116,12 +109,7 @@ namespace groupOrdering.UI
             string storeID = value[0];
             string userID = messageComponent.User.Id.ToString();
             User user = new User(userID);
-            string serverID;
-#if DEBUG
-            serverID = TEST_SERVER_ID;
-#else
-            serverID = messageComponent.ChannelId.ToString() ?? "";
-#endif
+            string serverID = messageComponent.GuildId.ToString() ?? "";
             _app.GetCreateOrderHandler().ChooseExistStore(user, storeID, serverID);
             await messageComponent.DeferAsync();
         }
