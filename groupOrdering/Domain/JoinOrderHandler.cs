@@ -47,7 +47,7 @@ namespace groupOrdering.Domain
                 _joinOrderProcess[user.UserID].JoinOrder(user);
                 return true;
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return false;
             }

@@ -8,6 +8,7 @@ namespace groupOrdering.Domain
 {
     public class StoreItem
     {
+        // TODO 全部改成大寫，Boundary要確定可以撈出來
         public string storeitemID { get; set; }
         public string storeitemName { get; set; }
         public int storeitemPrice { get; set; }

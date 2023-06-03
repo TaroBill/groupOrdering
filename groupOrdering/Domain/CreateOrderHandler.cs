@@ -9,12 +9,13 @@ namespace groupOrdering.Domain
 {
     public class CreateOrderHandler
     {
-        private Dictionary<string, GroupBuying> _CreateOrderProcess;
+        private readonly Dictionary<string, GroupBuying> _createOrderProcess;
+
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
 
         public CreateOrderHandler()
         {
-            _CreateOrderProcess = new Dictionary<string, GroupBuying>();
+            _createOrderProcess = new Dictionary<string, GroupBuying>();
             _groupBuyingsBoundary = new GroupBuyingsBoundary();
         }
 
@@ -25,18 +26,18 @@ namespace groupOrdering.Domain
 
         public GroupBuying? GetGroupBuying(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
                 return null;
             }
-            return _CreateOrderProcess[user.UserID];
+            return _createOrderProcess[user.UserID];
         }
 
         public void CreateGroupBuying(User user, string name, string serverID)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
-                _CreateOrderProcess.Add(user.UserID, new GroupBuying(_groupBuyingsBoundary, name, serverID));
+                _createOrderProcess.Add(user.UserID, new GroupBuying(_groupBuyingsBoundary, name, serverID));
             }
         }
 
@@ -50,44 +51,53 @@ namespace groupOrdering.Domain
 
         public void ChooseExistStore(User user, string storeID, string serverID)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
                 return;
             }
-            _CreateOrderProcess[user.UserID].ChooseExistStore(storeID, serverID);
+            _createOrderProcess[user.UserID].ChooseExistStore(storeID, serverID);
         }
 
         public void SetEndTime(User user, DateTime time)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
                 return;
             }
-            _CreateOrderProcess[user.UserID].SetEndTime(time);
+            _createOrderProcess[user.UserID].SetEndTime(time);
+        }
+
+        public void SetGroupBuyingName(User user, string name)
+        {
+            if (!_createOrderProcess.ContainsKey(user.UserID))
+            {
+                return;
+            }
+            _createOrderProcess[user.UserID].GroupBuyingName = name;
         }
 
         public void EndEdit(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
                 return;
             }
-            _CreateOrderProcess[user.UserID].PublishGroupBuying(user);
-            _CreateOrderProcess.Remove(user.UserID);
+            _createOrderProcess[user.UserID].PublishGroupBuying(user);
+            _createOrderProcess.Remove(user.UserID);
         }
 
         public bool CheckStartOrder(User user)
         {
-            return _CreateOrderProcess.ContainsKey(user.UserID);
+            return _createOrderProcess.ContainsKey(user.UserID);
         }
 
         public bool CheckChooseStore(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
-            return _CreateOrderProcess[user.UserID].GetStore().StoreID != "0";
+            return _createOrderProcess[user.UserID].GetStore().StoreID != "0";
         }
 
         public bool CheckEndTime(DateTime endTime)
@@ -97,11 +107,11 @@ namespace groupOrdering.Domain
 
         public bool CheckEndTimeValid(User user)
         {
-            if (!_CreateOrderProcess.ContainsKey(user.UserID))
+            if (!_createOrderProcess.ContainsKey(user.UserID))
             {
                 return false;
             }
-            return CheckEndTime(_CreateOrderProcess[user.UserID].GetEndTime());
+            return CheckEndTime(_createOrderProcess[user.UserID].GetEndTime());
         }
     }
 }

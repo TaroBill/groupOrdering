@@ -7,7 +7,9 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Reflection.Emit;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,25 +20,31 @@ namespace groupOrdering.UI
     public class CreateOrderUI
     {
         private readonly DiscordSocketClient _client;
-        private readonly GroupBuyingApp _app;
+        private readonly CreateOrderHandler _handler;
 
-        private const string CREATE_ORDER_COMMAND = "create-order";
-        private const string END_TIME_MODAL_ID = "end-time-model";
-        private const string END_TIME_BUTTON_ID = "end-time-button";
-        private const string SEND_BUTTON_ID = "send-button";
-        private const string STORE_MENU_ID = "store-menu";
+        private readonly Dictionary<string, int> _storeBrowserCurrentNum;
+
+        private const string LIST_STORE_COMMAND = "list-store";
+
+        private const string CREATE_ORDER_MODAL_ID = "create-order-model";
+
+        private const string NEXT_ITEM_BUTTON_ID = "store-browser-next-button";
+        private const string PREVIOUS_ITEM_BUTTON_ID = "store-browser-previous-button";
+        private const string CHOOSE_STORE_BUTTON_ID = "store-browser-choose-store-button";
 
         public CreateOrderUI(DiscordSocketClient client, GroupBuyingApp app) 
         {
             _client = client;
-            _app = app;
+            _handler = app.GetCreateOrderHandler();
+
+            _storeBrowserCurrentNum = new Dictionary<string, int>();
 
             _client.Ready += CreateOrder_Ready;
-            _client.SlashCommandExecuted += CreateOrderCommandHandler;
-            _client.SelectMenuExecuted += StoreMenuHandler;
-            _client.ButtonExecuted += EndDateTimeButtonHandler;
-            _client.ButtonExecuted += SendButtonHandler;
-            _client.ModalSubmitted += EndTimeDatePickerHandler;
+            _client.SlashCommandExecuted += ListStoreCommandHandler;
+            _client.ModalSubmitted += CreateOrderModalHandler;
+            _client.ButtonExecuted += ChooseStoreButtonHandler;
+            _client.ButtonExecuted += NextStoreButtonHandler;
+            _client.ButtonExecuted += PreviousStoreButtonHandler;
         }
 
         private async Task CreateOrder_Ready()
@@ -45,9 +53,8 @@ namespace groupOrdering.UI
 
             var guild = _client.GetGuild(TEST_GUILD_ID);
             var createOrderCommand = new SlashCommandBuilder()
-                .WithName(CREATE_ORDER_COMMAND)
-                .WithDescription("創建一筆團購訂單")
-                .AddOption("團購名稱", ApplicationCommandOptionType.String, "請輸入欲創建的團購名稱", isRequired: true);
+                .WithName(LIST_STORE_COMMAND)
+                .WithDescription("瀏覽所有店家");
             try
             {
                 // 測試時只允許特定伺服器啟用指令，正式時使用下面那個
@@ -64,149 +71,161 @@ namespace groupOrdering.UI
             }
         }
     
-        private async Task CreateOrderCommandHandler(SocketSlashCommand command)
+        private async Task ListStoreCommandHandler(SocketSlashCommand command)
         {
-            if (command.Data.Name != CREATE_ORDER_COMMAND)
+            if (command.Data.Name != LIST_STORE_COMMAND)
                 return;
 
             string userID = command.User.Id.ToString();
-            User user = new User(userID);
             string serverID = command.GuildId.ToString() ?? "";
-            string groupBuyingName = string.Join(", ", command.Data.Options.First(x => x.Name == "團購名稱").Value);
-            _app.GetCreateOrderHandler().CreateGroupBuying(user, groupBuyingName, serverID);
+            List<Store> stores = _handler.ListStore(serverID);
 
-            List<Store> stores = _app.GetCreateOrderHandler().ListStore(serverID);
-
-            SelectMenuBuilder menu = BuildStoreMenu(stores);
-            ButtonBuilder endTimeButton = BuildEndDateTimeButton();
-            ButtonBuilder sendButton = BuildSendButton();
-
-            ComponentBuilder messageBuilder = new ComponentBuilder()
-                .WithSelectMenu(menu)
-                .WithButton(endTimeButton)
-                .WithButton(sendButton);
-
-            await command.RespondAsync(components: messageBuilder.Build());
+            _storeBrowserCurrentNum[userID] = 0;
+            int num = _storeBrowserCurrentNum[userID] + 1;
+            Embed storeInfo = BuildStoreEmbed(stores[_storeBrowserCurrentNum[userID]], num, stores.Count);
+            ComponentBuilder componentBuilder = BuildStoreBrowser();
+            await command.RespondAsync(embed: storeInfo, components: componentBuilder.Build(), ephemeral: true);
         }
 
-        private SelectMenuBuilder BuildStoreMenu(List<Store> stores)
+        private ComponentBuilder BuildStoreBrowser()
         {
-            var menuBuilder = new SelectMenuBuilder()
-                .WithPlaceholder("請選擇店家")
-                .WithCustomId(STORE_MENU_ID);
-            foreach (Store store in stores)
+            var previousButtonBuilder = new ButtonBuilder()
+                .WithEmote(new Emoji("◀"))
+                .WithCustomId(PREVIOUS_ITEM_BUTTON_ID)
+                .WithStyle(ButtonStyle.Secondary);
+            var chooseStoreButtonBuilder = new ButtonBuilder()
+                .WithLabel("以此店家建立團購")
+                .WithCustomId(CHOOSE_STORE_BUTTON_ID)
+                .WithStyle(ButtonStyle.Primary);
+            var nextButtonBuilder = new ButtonBuilder()
+                .WithEmote(new Emoji("▶"))
+                .WithCustomId(NEXT_ITEM_BUTTON_ID)
+                .WithStyle(ButtonStyle.Secondary);
+            var builder = new ComponentBuilder();
+            builder.AddRow(new ActionRowBuilder().WithButton(previousButtonBuilder).WithButton(chooseStoreButtonBuilder).WithButton(nextButtonBuilder));
+            return builder;
+        }
+
+        private Embed BuildStoreEmbed(Store store, int num, int total)
+        {
+            EmbedBuilder builder = new EmbedBuilder()
+                .WithTitle(store.StoreName)
+                .WithDescription(ListStoreItems(store.ListItemsOfStore()))
+                .WithFooter($"頁{num}/{total}");
+            return builder.Build();
+        }
+
+        private string ListStoreItems(List<StoreItem> items)
+        {
+            
+            string result = "";
+            foreach (var item in items)
             {
-                menuBuilder.AddOption($"{store.StoreID},   {store.StoreName}", $"{store.StoreID}-{store.StoreName}");
+                string itemInfo = item.storeitemName;
+                itemInfo = itemInfo.PadRight(10, '﹒');
+                itemInfo += $"{item.storeitemPrice}元\n";
+                result += itemInfo;
             }
-            return menuBuilder;
+            return result;
         }
 
-        private async Task StoreMenuHandler(SocketMessageComponent messageComponent)
+        private async Task NextStoreButtonHandler(SocketMessageComponent messageComponent)
         {
-            if (messageComponent.Data.CustomId != STORE_MENU_ID)
+            if (messageComponent.Data.CustomId != NEXT_ITEM_BUTTON_ID)
                 return;
-            string[] value = string.Join(", ", messageComponent.Data.Values).Split('-');
-            string storeID = value[0];
+            string userID = messageComponent.User.Id.ToString();
+            string serverID = messageComponent.GuildId.ToString() ?? "";
+            var stores = _handler.ListStore(serverID);
+            int num = _storeBrowserCurrentNum.GetValueOrDefault(userID, 0) + 1;
+            if (num >= stores.Count)
+            {
+                await messageComponent.DeferAsync();
+                return;
+            }
+            _storeBrowserCurrentNum[userID] = num;
+            Embed storeInfo = BuildStoreEmbed(stores[num], num + 1, stores.Count);
+            await messageComponent.UpdateAsync(x => x.Embed = storeInfo);
+        }
+
+        private async Task PreviousStoreButtonHandler(SocketMessageComponent messageComponent)
+        {
+            if (messageComponent.Data.CustomId != PREVIOUS_ITEM_BUTTON_ID)
+                return;
+            string userID = messageComponent.User.Id.ToString();
+            string serverID = messageComponent.GuildId.ToString() ?? "";
+            var stores = _handler.ListStore(serverID);
+            int num = _storeBrowserCurrentNum.GetValueOrDefault(userID, 0) - 1;
+            if (num < 0)
+            {
+                await messageComponent.DeferAsync();
+                return;
+            }
+            _storeBrowserCurrentNum[userID] = num;
+            Embed storeInfo = BuildStoreEmbed(stores[num], num + 1, stores.Count);
+            await messageComponent.UpdateAsync(x => x.Embed = storeInfo);
+        }
+
+        private async Task ChooseStoreButtonHandler(SocketMessageComponent messageComponent)
+        {
+            if (messageComponent.Data.CustomId != CHOOSE_STORE_BUTTON_ID)
+                return;
+
             string userID = messageComponent.User.Id.ToString();
             User user = new User(userID);
             string serverID = messageComponent.GuildId.ToString() ?? "";
-            _app.GetCreateOrderHandler().ChooseExistStore(user, storeID, serverID);
-            await messageComponent.DeferAsync();
-        }
-        
-        private ButtonBuilder BuildEndDateTimeButton()
-        {
-            var buttonBuilder = new ButtonBuilder()
-                .WithLabel("點此設定截止時間")
-                .WithCustomId(END_TIME_BUTTON_ID)
-                .WithStyle(ButtonStyle.Primary);
-            return buttonBuilder;
-        }
 
-        private async Task EndDateTimeButtonHandler(SocketMessageComponent messageComponent)
-        {
-            if (messageComponent.Data.CustomId != END_TIME_BUTTON_ID)
-                return;
-            Modal endDate = BuildEndTimeDatePicker();
-            await messageComponent.RespondWithModalAsync(endDate);
-        }
+            _handler.CreateGroupBuying(user, "", serverID);
 
-        private ButtonBuilder BuildSendButton()
-        {
-            var buttonBuilder = new ButtonBuilder()
-                .WithLabel("送出")
-                .WithCustomId(SEND_BUTTON_ID)
-                .WithStyle(ButtonStyle.Primary);
-            return buttonBuilder;
-        }
+            int num = _storeBrowserCurrentNum.GetValueOrDefault(user.UserID, 0);
+            var storeList = _handler.ListStore(serverID);
+            _handler.ChooseExistStore(user, storeList[num].StoreID, serverID);
 
-        private async Task SendButtonHandler(SocketMessageComponent messageComponent)
-        {
-            if (messageComponent.Data.CustomId != SEND_BUTTON_ID)
-                return;
-
-            string userID = messageComponent.User.Id.ToString();
-            User user = new User(userID);
-
-            bool isChoseEndTime = _app.GetCreateOrderHandler().CheckEndTimeValid(user);
-            bool isSetStore = _app.GetCreateOrderHandler().CheckChooseStore(user);
-            if (!isSetStore)
-            {
-                await messageComponent.RespondAsync("請設置商店");
-                return;
-            }
-            if (!isChoseEndTime)
-            {
-                await messageComponent.RespondAsync("請設置截止時間");
-                return;
-            }
-            _app.GetCreateOrderHandler().EndEdit(user);
-            await messageComponent.Message.DeleteAsync();
-            await messageComponent.Channel.SendMessageAsync("已建立團購");
-        }
-
-        private Modal BuildEndTimeDatePicker()
-        {
-            var modalBuilder = new ModalBuilder()
+            var createOrderModalBuilder = new ModalBuilder()
                 .WithTitle("請選擇截止時間")
-                .WithCustomId(END_TIME_MODAL_ID)
+                .WithCustomId(CREATE_ORDER_MODAL_ID)
+                .AddTextInput("團購名稱", "group-buying-name", required: true, maxLength: 45)
                 .AddTextInput("Year", "year", placeholder: "yyyy", required: true, maxLength: 4, minLength: 1)
                 .AddTextInput("Month", "month", placeholder: "MM", required: true, maxLength: 2, minLength: 1)
                 .AddTextInput("Day", "day", placeholder: "dd", required: true, maxLength: 2, minLength: 1)
-                .AddTextInput("Hour", "hour", placeholder: "hh", required: true, maxLength: 2, minLength: 1)
-                .AddTextInput("Minutes", "minutes", placeholder: "mm", required: true, maxLength: 2, minLength: 1);
-            return modalBuilder.Build();
+                .AddTextInput("Hour", "hour", placeholder: "hh", required: true, maxLength: 2, minLength: 1);
+
+            await messageComponent.RespondWithModalAsync(createOrderModalBuilder.Build());
         }
 
-        private async Task EndTimeDatePickerHandler(SocketModal modal)
+        private async Task CreateOrderModalHandler(SocketModal modal)
         {
-            if (modal.Data.CustomId != END_TIME_MODAL_ID)
+            if (modal.Data.CustomId != CREATE_ORDER_MODAL_ID)
                 return;
             List<SocketMessageComponentData> components = modal.Data.Components.ToList();
             try
             {
+                string groupBuyingName = components.First(x => x.CustomId == "group-buying-name").Value;
                 int year = Int32.Parse(components.First(x => x.CustomId == "year").Value);
                 int month = Int32.Parse(components.First(x => x.CustomId == "month").Value);
                 int day = Int32.Parse(components.First(x => x.CustomId == "day").Value);
                 int hour = Int32.Parse(components.First(x => x.CustomId == "hour").Value);
-                int minutes = Int32.Parse(components.First(x => x.CustomId == "minutes").Value);
-                DateTime endTime = new DateTime(year, month, day, hour, minutes, 0);
-                if (!_app.GetCreateOrderHandler().CheckEndTime(endTime))
+                DateTime endTime = new DateTime(year, month, day, hour, 0, 0);
+                if (!_handler.CheckEndTime(endTime))
                 {
-                    await modal.RespondAsync("請設置現在以後的時間");
+                    await modal.RespondAsync("請設置現在以後的時間", ephemeral: true);
                 }
                 else
                 {
                     string userID = modal.User.Id.ToString();
                     User user = new User(userID);
-                    _app.GetCreateOrderHandler().SetEndTime(user, endTime);
-                    
-                    await modal.RespondAsync($"設定團購結束時間為{endTime}");
+                    _handler.SetGroupBuyingName(user, groupBuyingName);
+                    _handler.SetEndTime(user, endTime);
+                    _handler.EndEdit(user);
+                    await modal.RespondAsync($"已建立團購「{groupBuyingName}」", ephemeral: true);
                 }
             }
-            catch
+            catch(FormatException)
             {
-                await modal.RespondAsync("請確認時間格式是否正確");
+                await modal.RespondAsync("請確認時間格式是否正確", ephemeral: true);
+            }
+            catch(Exception)
+            {
+                await modal.RespondAsync("發生錯誤", ephemeral: true);
             }
         }
     }
