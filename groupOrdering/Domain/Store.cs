@@ -17,7 +17,17 @@ namespace groupOrdering.Domain
         public string StoreAddress { get; set; }
         public string StorePhoneNumber { get; set; }
 
-        private void InitStore(string storeID = "0", string storeName = "", string storeAddress = "", string storePhoneNumber = "")
+        public Store()
+        {
+            this._storesBoundary = new StoresBoundary();
+            this._items = new List<StoreItem>();
+            this.StoreID = "0";
+            this.StoreName = "";
+            this.StoreAddress = "";
+            this.StorePhoneNumber = "";
+        }
+
+        public Store(string storeID, string storeName, string storeAddress, string storePhoneNumber)
         {
             this._storesBoundary = new StoresBoundary();
             this._items = new List<StoreItem>();
@@ -25,16 +35,6 @@ namespace groupOrdering.Domain
             this.StoreName = storeName;
             this.StoreAddress = storeAddress;
             this.StorePhoneNumber = storePhoneNumber;
-        }
-
-        public Store()
-        {
-            InitStore();
-        }
-
-        public Store(string storeID, string storeName, string storeAddress, string storePhoneNumber)
-        {
-            InitStore(storeID, storeName, storeAddress, storePhoneNumber);
         }
 
         public void setItems(List<StoreItem> storeItems)

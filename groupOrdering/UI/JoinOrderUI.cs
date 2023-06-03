@@ -123,7 +123,7 @@ namespace groupOrdering.UI
             string allorders = "團購編號\t店家編號\t團購店家名稱\n";
             for (int i = 0; i < groupBuyings.Count; i++)
             {
-                allorders += $"{groupBuyings[i].GroupBuyingID}\t{groupBuyings[i].storeID}\t{groupBuyings[i].GroupbuyingName}\n";
+                allorders += $"{groupBuyings[i].GroupBuyingID}\t{groupBuyings[i].StoreID}\t{groupBuyings[i].GroupBuyingName}\n";
             }
 
             await command.RespondAsync(text : allorders);

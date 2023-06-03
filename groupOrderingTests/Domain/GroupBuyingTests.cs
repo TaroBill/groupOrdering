@@ -80,12 +80,6 @@ namespace groupOrdering.Domain.Tests
         }
 
         [TestMethod()]
-        public void EndGroupBuyingTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void ListItemsOfStoreTest()
         {
             Assert.Fail();
@@ -99,18 +93,6 @@ namespace groupOrdering.Domain.Tests
 
         [TestMethod()]
         public void GetTotalPriceTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void PublishGroupBuyingTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
-        public void CheckEndTimeTest()
         {
             Assert.Fail();
         }

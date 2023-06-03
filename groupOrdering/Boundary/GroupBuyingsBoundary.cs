@@ -10,7 +10,7 @@ namespace groupOrdering.Boundary
 {
     public class GroupBuyingsBoundary : IGroupBuyingsBoundary
     {
-        private DAO _dao;
+        private readonly DAO _dao;
 
         public GroupBuyingsBoundary()
         {
@@ -25,19 +25,21 @@ namespace groupOrdering.Boundary
 
         public List<GroupBuying> ListAllOrders(string serverID)
         {
-            return _dao.GetData<GroupBuying>($"SELECT CONVERT(groupbuying.groupbuyingID, CHAR) AS GroupBuyingID, store.storeID, store.storeName AS groupbuyingName " +
-                                        $"FROM groupordering.groupbuying LEFT JOIN groupordering.store " +
-                                        $"ON groupbuying.storeID=store.storeID " +
-                                        $"WHERE groupbuying.serverID='{serverID}';");
+            return _dao.GetData<GroupBuying>($@"SELECT groupbuying.groupbuyingID AS GroupBuyingID, store.storeID AS StoreID, store.storeName AS GroupBuyingName, groupbuying.callerUserID AS CallerUserID 
+                                        FROM groupordering.groupbuying LEFT JOIN groupordering.store 
+                                        ON groupbuying.storeID=store.storeID
+                                        WHERE groupbuying.serverID='{serverID}';");
         }
 
-        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID, string groupBuyingName)
+        public int PublishGroupBuying(string storeID, string serverID, DateTime endTime, string userID, string name)
         {
-            return _dao.SetData($"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID, groupbuyingName) VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}', '{groupBuyingName}');");
+            return _dao.SetData($@"INSERT INTO groupordering.groupbuying(storeID,status,serverID,endTime,callerUserID, groupbuyingName) 
+                                   VALUES ('{storeID}',{1},'{serverID}','{endTime.ToString("yyyy-MM-dd")}','{userID}', '{name}');");
         }
 
         public GroupBuying GetGroupBuyingByGroupID(string groupbuyingID)
         {
+            //TODO 整個SQL寫錯
             return _dao.GetData<GroupBuying>(@$"SELECT * FROM groupordering.memberorder 
                                                 WHERE groupbuyingID='{groupbuyingID}';").FirstOrDefault(new GroupBuying());
         }

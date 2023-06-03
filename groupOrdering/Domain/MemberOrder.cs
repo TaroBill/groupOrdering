@@ -11,12 +11,15 @@ namespace groupOrdering.Domain
 {
     public class MemberOrder
     {
+        //TODO 修改創建MemberOrder時設置該MemberOrder的UserID
+        public string UserID { get; set; }
         private Dictionary<StoreItem, int> _items;
         private MemberOrderBoundary _memberorderboundary;
         private StoresBoundary _storesboundary;
 
         public MemberOrder()
         {
+            UserID = "";
             _items = new Dictionary<StoreItem, int>();
             _memberorderboundary = new MemberOrderBoundary();
             _storesboundary = new StoresBoundary();
@@ -39,9 +42,9 @@ namespace groupOrdering.Domain
             }
         }
 
-        public void CalculateDebt()
+        public void CalculateDebt(string callerUserID)
         {
-            throw new NotImplementedException();
+            Users.AddNewDebt(UserID, callerUserID, GetTotal());
         }
 
         public int GetTotal()

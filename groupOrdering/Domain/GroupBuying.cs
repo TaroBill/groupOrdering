@@ -11,20 +11,22 @@ namespace groupOrdering.Domain
     public class GroupBuying
     {
         public string GroupBuyingID { get; set; }
-        public string storeID { get; set; }
-        public string GroupbuyingName { get; set; }
+        public string StoreID { get; set; }
+        public string GroupBuyingName { get; set; }
         private Store _store;
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
         private string _serverID;
         private DateTime _endTime;
+        private string CallerUserID { get; set; }
         private Dictionary<string, MemberOrder> _membersOrders;
 
-        private void InitGroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID = "0", string name = "", string serverID = "")
+        private void InitGroupBuying(IGroupBuyingsBoundary boundary, string groupBuyingID = "0", string name = "", string serverID = "", string callerUserID = "")
         {
             GroupBuyingID = groupBuyingID;
             _groupBuyingsBoundary = boundary;
-            GroupbuyingName = name;
+            GroupBuyingName = name;
             _serverID = serverID;
+            CallerUserID = callerUserID;
             _membersOrders = new Dictionary<string, MemberOrder>();
             _endTime = DateTime.Today;
             if (groupBuyingID=="0")
@@ -40,7 +42,7 @@ namespace groupOrdering.Domain
 
         public GroupBuying()
         {
-            
+            InitGroupBuying(new GroupBuyingsBoundary());
         }
 
         public GroupBuying(IGroupBuyingsBoundary boundary)
@@ -66,7 +68,7 @@ namespace groupOrdering.Domain
             {
                 throw new NullReferenceException("groupbuying not exist");
             }
-            InitGroupBuying(boundary, groupBuyingID, group.GroupbuyingName, group._serverID);
+            InitGroupBuying(boundary, groupBuyingID, group.GroupBuyingName, group._serverID);
         }
 
         public GroupBuying(IGroupBuyingsBoundary boundary, string name, string serverID)
@@ -102,7 +104,7 @@ namespace groupOrdering.Domain
 
         public void PublishGroupBuying(User user)
         {
-            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, GroupbuyingName);
+            _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, GroupBuyingName);
         }
 
         public void SetGroupBuying(User user)
@@ -117,12 +119,16 @@ namespace groupOrdering.Domain
 
         public void EndGroupBuying()
         {
-            throw new NotImplementedException();
+            foreach (KeyValuePair<string, MemberOrder> order in _membersOrders) 
+            {
+                order.Value.CalculateDebt(CallerUserID);
+            }
         }
 
         public void JoinOrder(User user)
         {
             _membersOrders.Add(user.UserID, new MemberOrder());
+            _membersOrders[user.UserID].UserID = user.UserID;
         }
 
         public void AddItem(User user, string itemID, int quantity)

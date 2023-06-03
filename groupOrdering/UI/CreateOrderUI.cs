@@ -72,7 +72,7 @@ namespace groupOrdering.UI
             string userID = command.User.Id.ToString();
             User user = new User(userID);
             string serverID = command.GuildId.ToString() ?? "";
-            string groupBuyingName = string.Join(", ", command.Data.Options.First().Value);
+            string groupBuyingName = string.Join(", ", command.Data.Options.First(x => x.Name == "團購名稱").Value);
             _app.GetCreateOrderHandler().CreateGroupBuying(user, groupBuyingName, serverID);
 
             List<Store> stores = _app.GetCreateOrderHandler().ListStore(serverID);

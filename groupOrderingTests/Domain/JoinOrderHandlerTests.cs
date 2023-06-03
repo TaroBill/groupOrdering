@@ -85,7 +85,7 @@ namespace groupOrdering.Domain.Tests
             {
                 var order = orderList[i];
                 Assert.AreEqual((i+1).ToString(), order.GroupBuyingID);
-                Assert.AreEqual($"測試團購{(i + 1)}", order.GroupbuyingName);
+                Assert.AreEqual($"測試團購{(i + 1)}", order.GroupBuyingName);
             }
         }
 
