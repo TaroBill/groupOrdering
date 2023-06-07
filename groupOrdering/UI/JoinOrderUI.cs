@@ -142,7 +142,7 @@ namespace groupOrdering.UI
             string allitems = "餐點編號\t餐點名稱\t餐點價格\n";
             for (int i = 0; i < storeItems.Count; i++)
             {
-                allitems += $"{storeItems[i].storeitemID}\t{storeItems[i].storeitemName}\t{storeItems[i].storeitemPrice}\n";
+                allitems += $"{storeItems[i].StoreitemID}\t{storeItems[i].StoreitemName}\t{storeItems[i].StoreitemPrice}\n";
             }
 
             await command.RespondAsync(text: allitems);
@@ -212,7 +212,7 @@ namespace groupOrdering.UI
                 .WithCustomId(STORE_ITEM_ID);
             foreach (StoreItem storeitem in storeItems)
             {
-                menuBuilder.AddOption($"{storeitem.storeitemName}({storeitem.storeitemPrice}元)", $"{storeitem.storeitemID}");
+                menuBuilder.AddOption($"{storeitem.StoreitemName}({storeitem.StoreitemPrice}元)", $"{storeitem.StoreitemID}");
             }
             return menuBuilder;
         }

@@ -19,19 +19,32 @@ namespace groupOrdering.Boundary
 
         public List<Store> ListStores(string serverID)
         {
-            return _dao.GetData<Store>($"SELECT * FROM groupordering.store WHERE serverID='{serverID}';");
+            return _dao.GetData<Store>(@$"SELECT storeID AS StoreID, 
+                                        storeName AS StoreName, 
+                                        storeAddress AS StoreAddress, 
+                                        storePhoneNumber AS StorePhoneNumber 
+                                        FROM groupordering.store 
+                                        WHERE serverID='{serverID}';");
         }
 
         public Store GetStore(string storeID, string serverID)
         {
-            return _dao.GetData<Store>($"SELECT * FROM groupordering.store WHERE storeID='{storeID}' AND serverID='{serverID}';").FirstOrDefault(new Store());
+            return _dao.GetData<Store>(@$"SELECT storeID AS StoreID, 
+                                        storeName AS StoreName, 
+                                        storeAddress AS StoreAddress, 
+                                        storePhoneNumber AS StorePhoneNumber 
+                                        FROM groupordering.store 
+                                        WHERE storeID='{storeID}' 
+                                        AND serverID='{serverID}';").FirstOrDefault(new Store());
         }
 
         public List<StoreItem> ListItemsOfStore(string storeID)
         {
-            return _dao.GetData<StoreItem>($"SELECT storeitem.storeitemID AS storeitemID, storeitem.storeitemName AS storeitemName, storeitem.storeitemPrice AS storeitemPrice " +
-                                            $"FROM groupordering.storeitem " +
-                                            $"WHERE storeitem_storeID='{storeID}';");
+            return _dao.GetData<StoreItem>(@$"SELECT storeitem.storeitemID AS StoreitemID, 
+                                            storeitem.storeitemName AS StoreitemName, 
+                                            storeitem.storeitemPrice AS StoreitemPrice 
+                                            FROM groupordering.storeitem 
+                                            WHERE storeitem_storeID='{storeID}';");
         }
     }
 }

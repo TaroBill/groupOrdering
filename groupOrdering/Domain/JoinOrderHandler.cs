@@ -65,7 +65,7 @@ namespace groupOrdering.Domain
         {
             foreach (StoreItem item in storeItems)
             {
-                if (item.storeitemID == itemID)
+                if (item.StoreitemID == itemID)
                 {
                     return true;
                 }

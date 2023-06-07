@@ -121,9 +121,9 @@ namespace groupOrdering.UI
             string result = "";
             foreach (var item in items)
             {
-                string itemInfo = item.storeitemName;
+                string itemInfo = item.StoreitemName;
                 itemInfo = itemInfo.PadRight(10, '﹒');
-                itemInfo += $"{item.storeitemPrice}元\n";
+                itemInfo += $"{item.StoreitemPrice}元\n";
                 result += itemInfo;
             }
             return result;
