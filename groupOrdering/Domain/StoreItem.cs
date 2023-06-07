@@ -8,10 +8,9 @@ namespace groupOrdering.Domain
 {
     public class StoreItem
     {
-        // TODO 全部改成大寫，Boundary要確定可以撈出來
-        public string storeitemID { get; set; }
-        public string storeitemName { get; set; }
-        public int storeitemPrice { get; set; }
+        public string StoreitemID { get; set; }
+        public string StoreitemName { get; set; }
+        public int StoreitemPrice { get; set; }
 
         public StoreItem()
         {
@@ -20,15 +19,15 @@ namespace groupOrdering.Domain
 
         public StoreItem(string storeitemName, int storeitemPrice)
         {
-            this.storeitemName = storeitemName;
-            this.storeitemPrice = storeitemPrice;
+            this.StoreitemName = storeitemName;
+            this.StoreitemPrice = storeitemPrice;
         }
 
         public StoreItem(string storeitemID, string storeitemName, int storeitemPrice)
         {
-            this.storeitemID = storeitemID;
-            this.storeitemName = storeitemName;
-            this.storeitemPrice = storeitemPrice;
+            this.StoreitemID = storeitemID;
+            this.StoreitemName = storeitemName;
+            this.StoreitemPrice = storeitemPrice;
         }
     }
 }

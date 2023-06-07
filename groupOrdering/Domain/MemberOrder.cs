@@ -11,7 +11,6 @@ namespace groupOrdering.Domain
 {
     public class MemberOrder
     {
-        //TODO 修改創建MemberOrder時設置該MemberOrder的UserID
         public string UserID { get; set; }
         private Dictionary<StoreItem, int> _items;
         private MemberOrderBoundary _memberorderboundary;
@@ -32,7 +31,7 @@ namespace groupOrdering.Domain
                 _memberorderboundary.DeleteItems(user, groupbuyingID);
                 foreach (var pair in _items)
                 {
-                    _memberorderboundary.SubmitItem(user, groupbuyingID, pair.Key.storeitemID, pair.Value);
+                    _memberorderboundary.SubmitItem(user, groupbuyingID, pair.Key.StoreitemID, pair.Value);
                 }
                 return true;
             }
@@ -52,7 +51,7 @@ namespace groupOrdering.Domain
             int total = 0;
             foreach(var pair in _items)
             {
-                total += pair.Key.storeitemPrice * pair.Value;
+                total += pair.Key.StoreitemPrice * pair.Value;
             }
             return total;
         }

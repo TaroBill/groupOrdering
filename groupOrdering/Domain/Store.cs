@@ -49,7 +49,7 @@ namespace groupOrdering.Domain
 
         public StoreItem GetStoreItem(string storeitemID)
         {
-            return _items.FirstOrDefault(x => x.storeitemID == storeitemID, new StoreItem());
+            return _items.FirstOrDefault(x => x.StoreitemID == storeitemID, new StoreItem());
         }
 
         public void SetStore(string storeID, string serverID)
