@@ -113,8 +113,8 @@ namespace groupOrdering.Domain.Tests
             List<StoreItem>  itemsList = _joinOrderHandler.ListItemsOfStore("1", SERVER_ID, _mockStoresBoundary);
             for (int i=0;i<itemsList.Count;i++)
             {
-                Assert.AreEqual(name[i], itemsList[i].storeitemName);
-                Assert.AreEqual(price[i], itemsList[i].storeitemPrice);
+                Assert.AreEqual(name[i], itemsList[i].StoreitemName);
+                Assert.AreEqual(price[i], itemsList[i].StoreitemPrice);
             }
 
             itemsList = _joinOrderHandler.ListItemsOfStore("2", SERVER_ID, _mockStoresBoundary);
@@ -122,8 +122,8 @@ namespace groupOrdering.Domain.Tests
             name = new string[3] { "香蕉", "御茶園", "脆迪酥" };
             for (int i = 0; i < itemsList.Count; i++)
             {
-                Assert.AreEqual(name[i], itemsList[i].storeitemName);
-                Assert.AreEqual(price[i], itemsList[i].storeitemPrice);
+                Assert.AreEqual(name[i], itemsList[i].StoreitemName);
+                Assert.AreEqual(price[i], itemsList[i].StoreitemPrice);
             }
         }
 
