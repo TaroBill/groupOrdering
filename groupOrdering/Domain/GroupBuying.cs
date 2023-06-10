@@ -15,6 +15,7 @@ namespace groupOrdering.Domain
         public string GroupBuyingName { get; set; }
         private Store _store;
         private IGroupBuyingsBoundary _groupBuyingsBoundary;
+        private IMemberOrderBoundary _memberOrderBoundary;
         private string _serverID;
         private DateTime _endTime;
         private string CallerUserID { get; set; }
@@ -28,6 +29,7 @@ namespace groupOrdering.Domain
             _serverID = serverID;
             CallerUserID = callerUserID;
             _membersOrders = new Dictionary<string, MemberOrder>();
+            _memberOrderBoundary = new MemberOrderBoundary();
             _endTime = DateTime.Today;
             if (groupBuyingID=="0")
             {
@@ -107,9 +109,22 @@ namespace groupOrdering.Domain
             _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, GroupBuyingName);
         }
 
-        public void SetGroupBuying(User user)
+        public void SetGroupBuying(User user, string groupbuyingID)
         {
-            throw new NotImplementedException();
+            CallerUserID = user.UserID;
+            GroupBuying data = _groupBuyingsBoundary.GetGroupBuyingByGroupID(user.UserID, GroupBuyingID);
+            if (data.GroupBuyingID == "0")
+            {
+                throw new NullReferenceException("GroupBuying is not exist");
+            }
+            InitGroupBuying(data._groupBuyingsBoundary, data.GroupBuyingID, data.GroupBuyingName, data._serverID, data.CallerUserID);
+            //TODO 下面的DB CODE應該放在G還是M??
+            List<MemberOrder> memberOrders = _memberOrderBoundary.LoadMemberUserID(GroupBuyingID);
+            foreach (MemberOrder memberOrder in memberOrders)
+            {
+                _membersOrders[memberOrder.UserID] = new MemberOrder();
+                _membersOrders[memberOrder.UserID].LoadMemberOrder(GroupBuyingID, memberOrder.UserID, _store);
+            }
         }
 
         public void CreateMemberOrder()
@@ -117,12 +132,19 @@ namespace groupOrdering.Domain
             throw new NotImplementedException();
         }
 
-        public void EndGroupBuying()
+        public string EndGroupBuying()
         {
+            string result = "";
+            int total=0;
             foreach (KeyValuePair<string, MemberOrder> order in _membersOrders) 
             {
                 order.Value.CalculateDebt(CallerUserID);
+                result += order.Value.OrderToString();
+                total += order.Value.GetTotal();
             }
+            _groupBuyingsBoundary.EndGroupBuying(GroupBuyingID);
+            result += $"一共 : {total}元\n";
+            return result;
         }
 
         public void JoinOrder(User user)

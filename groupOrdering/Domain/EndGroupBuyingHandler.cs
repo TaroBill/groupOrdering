@@ -1,4 +1,5 @@
-﻿using System;
+﻿using groupOrdering.Boundary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,14 @@ namespace groupOrdering.Domain
     {
         public EndGroupBuyingHandler() 
         {
+
         }
 
-        public void EndGroupBuying()
+        public string EndGroupBuying(User user, string groupbuyingID)
         {
-            throw new NotImplementedException();
+            GroupBuying groupBuying = new GroupBuying(new GroupBuyingsBoundary(), groupbuyingID);
+            groupBuying.SetGroupBuying(user, groupbuyingID);
+            return groupBuying.EndGroupBuying();
         }
     }
 }

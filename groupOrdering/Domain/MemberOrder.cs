@@ -12,6 +12,8 @@ namespace groupOrdering.Domain
     public class MemberOrder
     {
         public string UserID { get; set; }
+        public string StoreitemID { get; set; }
+        public int Quantity { get; set; }
         private Dictionary<StoreItem, int> _items;
         private MemberOrderBoundary _memberorderboundary;
         private StoresBoundary _storesboundary;
@@ -19,6 +21,8 @@ namespace groupOrdering.Domain
         public MemberOrder()
         {
             UserID = "";
+            StoreitemID = "";
+            Quantity = 0;
             _items = new Dictionary<StoreItem, int>();
             _memberorderboundary = new MemberOrderBoundary();
             _storesboundary = new StoresBoundary();
@@ -41,9 +45,29 @@ namespace groupOrdering.Domain
             }
         }
 
+        public void LoadMemberOrder(string groupbuyingID, string userID, Store store)
+        {
+            List<MemberOrder> memberOrders = _memberorderboundary.LoadMemberOrder(groupbuyingID, userID);
+            UserID = memberOrders[0].UserID;
+            foreach (var memberOrder in memberOrders)
+            {
+                _items[store.GetStoreItem(memberOrder.StoreitemID)] = memberOrder.Quantity;
+            }
+        }
+
         public void CalculateDebt(string callerUserID)
         {
-            Users.AddNewDebt(UserID, callerUserID, GetTotal());
+            Users.AddNewDebt(callerUserID, UserID, GetTotal());
+        }
+
+        public string OrderToString()
+        {
+            string result = "";
+            foreach (var pair in _items)
+            {
+                result += $"{pair.Key.StoreitemName} X {pair.Value}\n";
+            }
+            return result;
         }
 
         public int GetTotal()
