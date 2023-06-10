@@ -88,7 +88,7 @@ namespace groupOrdering.Domain
 
         public void EditItem(StoreItem item, int quantity)
         {
-            AddItem(item, quantity);
+            _items[item] = quantity;
         }
 
         public void DeleteItem(StoreItem item)

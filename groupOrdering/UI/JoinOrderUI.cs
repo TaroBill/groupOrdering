@@ -25,10 +25,10 @@ namespace groupOrdering.UI
         private const string LIST_ALL_ORDER_COMMAND = "list-all-order";
         private const string LIST_ITEM_OF_STORE_COMMAND = "list-item-of-store";
         private const string JOIN_ORDER_COMMAND = "join-order";
-        private const string OPERATOR_TYPE_ID = "operator-type";
-        private const string STORE_ITEM_ID = "store-item";
-        private const string STORE_ITEM_QUANTITY_ID = "store-item-quantity";
-        private const string EDIT_ITEM_BTN_ID = "edit-item-btn";
+        private const string OPERATOR_TYPE_ID = "join-operator-type";
+        private const string STORE_ITEM_ID = "join-store-item";
+        private const string STORE_ITEM_QUANTITY_ID = "join-store-item-quantity";
+        private const string EDIT_ITEM_BTN_ID = "join-edit-item-btn";
         private const string SUBMIT_ORDER_BTN_ID = "submit-order-btn";
 
         public JoinOrderUI(DiscordSocketClient client, GroupBuyingApp app)
@@ -126,7 +126,7 @@ namespace groupOrdering.UI
                 allorders += $"{groupBuyings[i].GroupBuyingID}\t{groupBuyings[i].StoreID}\t{groupBuyings[i].GroupBuyingName}\n";
             }
 
-            await command.RespondAsync(text : allorders);
+            await command.RespondAsync(text : allorders, ephemeral: true);
         }
 
         private async Task ListItemOfStoreCommandHandler(SocketSlashCommand command)
@@ -145,7 +145,7 @@ namespace groupOrdering.UI
                 allitems += $"{storeItems[i].StoreitemID}\t{storeItems[i].StoreitemName}\t{storeItems[i].StoreitemPrice}\n";
             }
 
-            await command.RespondAsync(text: allitems);
+            await command.RespondAsync(text: allitems, ephemeral: true);
         }
 
         private async Task JoinOrderCommandHandler(SocketSlashCommand command)
@@ -159,7 +159,7 @@ namespace groupOrdering.UI
             string groupbuyingID = string.Join(", ", command.Data.Options.First().Value);
             if (!_app.GetJoinOrderHandler().JoinOrder(serverID, groupbuyingID, user))
             {
-                await command.RespondAsync("加入團購失敗");
+                await command.RespondAsync("加入團購失敗", ephemeral: true);
                 return;
             }
             GroupBuying groupBuying = new GroupBuying(new GroupBuyingsBoundary(), groupbuyingID);
@@ -176,7 +176,7 @@ namespace groupOrdering.UI
                 .WithSelectMenu(itemQuantityBuilder)
                 .WithButton(editItemButtonBuilder)
                 .WithButton(subnitOrderButtonBuilder);
-            await command.RespondAsync(components : messageBuilder.Build());
+            await command.RespondAsync(components : messageBuilder.Build(), ephemeral: true);
         }
 
         private SelectMenuBuilder BuildOperatorTypeMenu()
@@ -276,22 +276,22 @@ namespace groupOrdering.UI
             User user = new User(userID);
             if (!_joinOrderUIData.ContainsKey(userID))
             {
-                await messageComponent.RespondAsync("尚未選擇操作模式");
+                await messageComponent.RespondAsync("尚未選擇操作模式", ephemeral: true);
                 return;
             }
             if (_joinOrderUIData[userID].OPERATOR == "-1")
             {
-                await messageComponent.RespondAsync("尚未選擇操作模式");
+                await messageComponent.RespondAsync("尚未選擇操作模式", ephemeral: true);
                 return;
             }
             if (_joinOrderUIData[userID].ITEMID == "-1")
             {
-                await messageComponent.RespondAsync("尚未選擇商品");
+                await messageComponent.RespondAsync("尚未選擇商品", ephemeral: true);
                 return;
             }
             if (_joinOrderUIData[userID].QUANTITY == 0)
             {
-                await messageComponent.RespondAsync("尚未選擇購買數量");
+                await messageComponent.RespondAsync("尚未選擇購買數量", ephemeral: true);
                 return;
             }
             if (_joinOrderUIData[userID].OPERATOR == "0")
@@ -306,7 +306,7 @@ namespace groupOrdering.UI
             {
                 _app.GetJoinOrderHandler().DeleteItem(user, _joinOrderUIData[userID].ITEMID);
             }
-            await messageComponent.RespondAsync("已更新訂單列表");
+            await messageComponent.RespondAsync("已更新訂單列表", ephemeral: true);
         }
 
         private ButtonBuilder BuildSubmitOrderButton()
@@ -326,12 +326,11 @@ namespace groupOrdering.UI
             User user = new User(userID);
             if (!_joinOrderUIData.ContainsKey(userID))
             {
-                await messageComponent.RespondAsync("尚未選擇操作模式");
+                await messageComponent.RespondAsync("尚未選擇操作模式", ephemeral: true);
                 return;
             }
-            await messageComponent.Channel.SendMessageAsync($"已完成團購點餐\n總共花費:{_app.GetJoinOrderHandler().GetTotal(user)}元");
+            await messageComponent.RespondAsync($"已完成團購點餐\n總共花費:{_app.GetJoinOrderHandler().GetTotal(user)}元", ephemeral: true);
             _app.GetJoinOrderHandler().SubmitOrder(user);
-            await messageComponent.Message.DeleteAsync();
         }
     }
 }

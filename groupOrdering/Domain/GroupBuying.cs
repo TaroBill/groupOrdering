@@ -109,7 +109,7 @@ namespace groupOrdering.Domain
             _groupBuyingsBoundary.PublishGroupBuying(_store.StoreID, _serverID, _endTime, user.UserID, GroupBuyingName);
         }
 
-        public void SetGroupBuying(User user, string groupbuyingID)
+        public void SetGroupBuying(User user)
         {
             CallerUserID = user.UserID;
             GroupBuying data = _groupBuyingsBoundary.GetGroupBuyingByGroupID(user.UserID, GroupBuyingID);
@@ -127,9 +127,10 @@ namespace groupOrdering.Domain
             }
         }
 
-        public void CreateMemberOrder()
+        public void SelectGroupBuying(User user)
         {
-            throw new NotImplementedException();
+            _membersOrders[user.UserID] = new MemberOrder();
+            _membersOrders[user.UserID].LoadMemberOrder(GroupBuyingID, user.UserID, _store);
         }
 
         public string EndGroupBuying()

@@ -17,7 +17,7 @@ namespace groupOrdering.Domain
         public string EndGroupBuying(User user, string groupbuyingID)
         {
             GroupBuying groupBuying = new GroupBuying(new GroupBuyingsBoundary(), groupbuyingID);
-            groupBuying.SetGroupBuying(user, groupbuyingID);
+            groupBuying.SetGroupBuying(user);
             return groupBuying.EndGroupBuying();
         }
     }

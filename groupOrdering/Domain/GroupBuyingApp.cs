@@ -11,6 +11,7 @@ namespace groupOrdering.Domain
         private CreateOrderHandler _createOrderHandler;
         private CreateStoreHandler _createStoreHandler;
         private JoinOrderHandler  _joinOrderHandler;
+        private EditOrderHandler _editOrderHandler;
         private EndGroupBuyingHandler _endGroupBuyingHandler;
 
         public GroupBuyingApp()
@@ -18,6 +19,7 @@ namespace groupOrdering.Domain
             _createOrderHandler = new CreateOrderHandler();
             _createStoreHandler = new CreateStoreHandler();
             _joinOrderHandler = new JoinOrderHandler();
+            _editOrderHandler = new EditOrderHandler();
             _endGroupBuyingHandler = new EndGroupBuyingHandler();
         }
 
@@ -26,6 +28,8 @@ namespace groupOrdering.Domain
         public JoinOrderHandler GetJoinOrderHandler() { return _joinOrderHandler; }
 
         public CreateOrderHandler GetCreateOrderHandler() { return _createOrderHandler; }   
+
+        public EditOrderHandler GetEditOrderHandler() { return _editOrderHandler; }
 
         public EndGroupBuyingHandler GetEndGroupBuyingHandler() { return _endGroupBuyingHandler;}
     }
