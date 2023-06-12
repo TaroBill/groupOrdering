@@ -19,7 +19,7 @@ namespace groupOrdering.Boundary
 
         public Store GetStoreByGroupbuyingID(string groupbuyingID)
         {
-            return _dao.GetData<Store>(@$"SELECT storeID AS StoreID  
+            return _dao.GetData<Store>(@$"SELECT storeID AS StoreID 
                                         FROM groupordering.groupbuying 
                                         WHERE groupbuying.groupbuyingID='{groupbuyingID}';").FirstOrDefault(new Store());
         }
@@ -30,10 +30,10 @@ namespace groupOrdering.Boundary
                                                 groupbuying.storeID AS StoreID, 
                                                 groupbuying.serverID AS _serverID, 
                                                 callerUserID AS CallerUserID, 
-                                                groupbuyingName AS GroupBuyingName  
+                                                groupbuyingName AS GroupBuyingName 
                                                 FROM groupordering.groupbuying LEFT JOIN groupordering.store 
-                                                ON groupbuying.storeID=store.storeID
-                                                WHERE groupbuying.serverID='{serverID}'
+                                                ON groupbuying.storeID=store.storeID 
+                                                WHERE groupbuying.serverID='{serverID}' 
                                                 AND groupbuying.status=1;");
         }
 
@@ -49,9 +49,29 @@ namespace groupOrdering.Boundary
                                                 storeID AS StoreID, 
                                                 serverID AS _serverID, 
                                                 callerUserID AS CallerUserID, 
-                                                groupbuyingName AS GroupBuyingName  
+                                                groupbuyingName AS GroupBuyingName 
                                                 FROM groupordering.groupbuying 
                                                 WHERE groupbuying.groupbuyingID='{groupbuyingID}';").FirstOrDefault(new GroupBuying());
+        }
+
+        public GroupBuying GetGroupBuyingByGroupID(string callerUserID, string groupbuyingID)
+        {
+            return _dao.GetData<GroupBuying>(@$"SELECT groupbuyingID AS GroupBuyingID, 
+                                                storeID AS StoreID, 
+                                                serverID AS _serverID, 
+                                                callerUserID AS CallerUserID, 
+                                                groupbuyingName AS GroupBuyingName 
+                                                FROM groupordering.groupbuying 
+                                                WHERE groupbuying.groupbuyingID='{groupbuyingID}' 
+                                                AND groupbuying.CallerUserID='{callerUserID}' 
+                                                AND groupbuying.status=1;").FirstOrDefault(new GroupBuying());
+        }
+
+        public void EndGroupBuying(string groupbuyingID)
+        {
+            _dao.SetData(@$"UPDATE groupordering.groupbuying 
+                            SET status=0 
+                            WHERE groupbuying.groupbuyingID='{groupbuyingID}';");
         }
     }
 }

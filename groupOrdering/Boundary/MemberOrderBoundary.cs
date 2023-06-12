@@ -27,9 +27,26 @@ namespace groupOrdering.Boundary
 
         public bool SubmitItem(User user, string groupbuyingID, string itemID, int quantity)
         {
-            int result = _dao.SetData($"INSERT INTO groupordering.memberorder(userID, groupbuyingID, storeitemID, quantity) " +
-                                        $"values('{user.UserID}', '{groupbuyingID}', '{itemID}', '{quantity}');");
+            int result = _dao.SetData(@$"INSERT INTO groupordering.memberorder(userID, groupbuyingID, storeitemID, quantity) 
+                                        values('{user.UserID}', '{groupbuyingID}', '{itemID}', '{quantity}');");
             return result != 0;
+        }
+
+        public List<MemberOrder> LoadMemberUserID(string groupbuyingID)
+        {
+            return _dao.GetData<MemberOrder>(@$"SELECT DISTINCT userID AS UserID 
+                                                FROM groupordering.memberorder 
+                                                WHERE groupbuyingID='{groupbuyingID}';");
+        }
+
+        public List<MemberOrder> LoadMemberOrder(string groupbuyingID, string userID)
+        {
+            return _dao.GetData<MemberOrder>(@$"SELECT userID AS UserID, 
+                                                storeitemID AS StoreitemID, 
+                                                quantity AS Quantity 
+                                                FROM groupordering.memberorder 
+                                                WHERE groupbuyingID='{groupbuyingID}' 
+                                                AND userID='{userID}';");
         }
     }
 }
