@@ -46,5 +46,24 @@ namespace groupOrdering.Boundary
                                             FROM groupordering.storeitem 
                                             WHERE storeitem_storeID='{storeID}';");
         }
+
+        public void SaveStoreData(Store store)
+        {
+            _dao.SetData($@"INSERT INTO `groupordering`.`store` (`storeName`, `storeAddress`, `storePhoneNumber`, `serverID`) 
+                            VALUES ('{store.StoreName}', '{store.StoreAddress}', '{store.StorePhoneNumber}', '{store.ServerID}');");
+            string storeID = _dao.GetData<string>($@"SELECT storeID FROM groupordering.store 
+                                                     WHERE serverID='{store.ServerID}' and storeName='{store.StoreName}' and storeAddress='{store.StoreAddress}' and storePhoneNumber='{store.StorePhoneNumber}';").FirstOrDefault("0");
+            List<StoreItem> items = store.GetStoreItems();
+            foreach (StoreItem item in items)
+            {
+                SaveStoreItemData(item, storeID);
+            }
+
+        }
+        private void SaveStoreItemData(StoreItem item, string store_ID)
+        {
+            _dao.SetData($@"INSERT INTO `groupordering`.`storeitem` (`storeitemName`, `storeitemPrice`, `storeitem_storeID`) 
+                            VALUES ('{item.StoreitemName}', '{item.StoreitemPrice}', '{store_ID}');");
+        }
     }
 }

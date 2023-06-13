@@ -21,6 +21,7 @@ namespace groupOrdering.UI
         private JoinOrderUI _joinOrderUI;
         private EditOrderUI _editOrderUI;
         private EndOrderUI _endOrderUI;
+        private CreateStoreUI _createStoreUI;
 
         public async Task MainAsync()
         {
@@ -36,6 +37,7 @@ namespace groupOrdering.UI
             _joinOrderUI = new JoinOrderUI(_client, _app);
             _editOrderUI = new EditOrderUI(_client, _app);
             _endOrderUI = new EndOrderUI(_client, _app);
+            _createStoreUI = new CreateStoreUI(_client, _app);
 
             _client.Log += Log;
 
