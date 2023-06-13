@@ -14,7 +14,9 @@ namespace groupOrdering.Domain
 
         public StoreItem()
         {
-
+            StoreitemID = "0";
+            StoreitemName = "";
+            StoreitemPrice = 0;
         }
 
         public StoreItem(string storeitemName, int storeitemPrice)

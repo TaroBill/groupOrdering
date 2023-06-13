@@ -38,7 +38,7 @@ namespace groupOrdering.Domain
             else
             {
                 _store = _groupBuyingsBoundary.GetStoreByGroupbuyingID(groupBuyingID);
-                _store.setItems(_store.ListItemsOfStore());
+                _store.SetItems(_store.ListItemsOfStore());
             }
         }
 

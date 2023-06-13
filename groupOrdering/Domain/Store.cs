@@ -16,12 +16,14 @@ namespace groupOrdering.Domain
         public string StoreName { get; set; }
         public string StoreAddress { get; set; }
         public string StorePhoneNumber { get; set; }
+        public string ServerID { get; set; }
 
         public Store()
         {
             this._storesBoundary = new StoresBoundary();
             this._items = new List<StoreItem>();
             this.StoreID = "0";
+            this.ServerID = "0";
             this.StoreName = "";
             this.StoreAddress = "";
             this.StorePhoneNumber = "";
@@ -31,13 +33,14 @@ namespace groupOrdering.Domain
         {
             this._storesBoundary = new StoresBoundary();
             this._items = new List<StoreItem>();
+            this.ServerID = "0";
             this.StoreID = storeID;
             this.StoreName = storeName;
             this.StoreAddress = storeAddress;
             this.StorePhoneNumber = storePhoneNumber;
         }
 
-        public void setItems(List<StoreItem> storeItems)
+        public void SetItems(List<StoreItem> storeItems)
         {
             _items = storeItems;
         }
@@ -62,6 +65,35 @@ namespace groupOrdering.Domain
             this.StorePhoneNumber = store.StorePhoneNumber;
         }
 
+        public void DeleteStoreItemAt(int num)
+        {
+            if (num >= _items.Count)
+                return;
+            _items.RemoveAt(num);
+        }
+
+        public void DeleteStoreItem(string itemName)
+        {
+            foreach (StoreItem item in _items)
+            {
+                if (item.StoreitemName == itemName)
+                {
+                    _items.Remove(item);
+                    return;
+                }
+            }
+        }
+
+        public bool IsInStoreItemList(int num)
+        {
+            return (num < _items.Count) && (num >= 0);
+        }
+
+        public int GetStoreItemCount()
+        {
+            return (_items.Count);
+        }
+
         public void AddStoreItem(string itemName, int price)
         {
             StoreItem item = new StoreItem(itemName, price);
@@ -77,14 +109,27 @@ namespace groupOrdering.Domain
             _items.Add(item);
         }
 
-        public void EndBuildStore(User user)
+        public void EndBuildStore()
         {
-            throw new NotImplementedException();
+            _storesBoundary.SaveStoreData(this);
         }
 
+        /// <summary>
+        /// 從資料庫取得商品
+        /// </summary>
+        /// <returns></returns>
         public List<StoreItem> ListItemsOfStore()
         {
             return _storesBoundary.ListItemsOfStore(StoreID);
+        }
+
+        /// <summary>
+        /// 從記憶體取得商品(僅限建立店家使用)
+        /// </summary>
+        /// <returns></returns>
+        public List<StoreItem> GetStoreItems()
+        {
+            return _items;
         }
     }
 }

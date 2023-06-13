@@ -8,41 +8,63 @@ namespace groupOrdering.Domain
 {
     public class CreateStoreHandler
     {
-        private IDictionary<string, Store> _CreateStoreProcess;
+        private readonly Dictionary<string, Store> _createStoreProcess;
 
-        public void CreateStore(User user)
+        public CreateStoreHandler()
         {
-            throw new NotImplementedException();
+            _createStoreProcess = new Dictionary<string, Store>();
         }
 
-        public void AddStoreItem(string itemName, int money)
+        public void CreateStore(User user, string serverID, string storeName, string storeAddress, string storePhoneNumber)
         {
-            throw new NotImplementedException();
+            _createStoreProcess[user.UserID] = _createStoreProcess.GetValueOrDefault(user.UserID, new Store());
+            _createStoreProcess[user.UserID].ServerID = serverID;
+            _createStoreProcess[user.UserID].StoreName = storeName;
+            _createStoreProcess[user.UserID].StoreAddress = storeAddress;
+            _createStoreProcess[user.UserID].StorePhoneNumber = storePhoneNumber;
+        }
+
+        public void AddStoreItem(User user, string itemName, int money)
+        {
+            if (!_createStoreProcess.ContainsKey(user.UserID))
+                return;
+            _createStoreProcess[user.UserID].AddStoreItem(itemName, money);
+        }
+
+        public void DeleteStoreItem(User user, string itemName)
+        {
+            if (!_createStoreProcess.ContainsKey(user.UserID))
+                return;
+            _createStoreProcess[user.UserID].DeleteStoreItem(itemName);
         }
 
         public void EndBuildStore(User user)
         {
-            throw new NotImplementedException();
+            if (!_createStoreProcess.ContainsKey(user.UserID))
+                return;
+            _createStoreProcess[user.UserID].EndBuildStore();
+            _createStoreProcess.Remove(user.UserID);
         }
 
-        public void EditStoreName(string storeName)
+        public void EditStoreName(User user, string storeName)
         {
-            throw new NotImplementedException();
+            if (!_createStoreProcess.ContainsKey(user.UserID))
+                return;
+            _createStoreProcess[user.UserID].StoreName = storeName;
         }
 
-        public void EditStorePhone(string phoneNumber)
+        public int GetTotalStoreItemCount(User user)
         {
-            throw new NotImplementedException();
+            if (!_createStoreProcess.ContainsKey(user.UserID))
+                return 0;
+            return _createStoreProcess[user.UserID].GetStoreItemCount();
         }
 
-        public void EditStoreAddress(string address)
+        public Store GetStore(User user)
         {
-            throw new NotImplementedException();
-        }
-
-        public void EndStoreEdition(User user)
-        {
-            throw new NotImplementedException();
+            if (!_createStoreProcess.ContainsKey(user.UserID))
+                return new Store();
+            return _createStoreProcess[user.UserID];
         }
     }
 }

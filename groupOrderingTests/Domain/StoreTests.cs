@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Moq;
 using groupOrdering.Boundary;
+using Discord;
 
 namespace groupOrdering.Domain.Tests
 {
@@ -44,27 +45,85 @@ namespace groupOrdering.Domain.Tests
         }
 
         [TestMethod()]
-        public void CreateMenuTest()
-        {
-            Assert.Fail();
-        }
-
-        [TestMethod()]
         public void AddStoreItemTest()
         {
-            Assert.Fail();
+            int count = _store.GetStoreItemCount();
+            Assert.AreEqual(0, count);
+            _store.AddStoreItem("item1", 20);
+            _store.AddStoreItem("item2", 30);
+            _store.AddStoreItem("item3", 40);
+            count = _store.GetStoreItemCount();
+            Assert.AreEqual(3, count);
         }
 
         [TestMethod()]
-        public void EndBuildStoreTest()
+        public void GetStoreItem()
         {
-            Assert.Fail();
+            StoreItem item1 = new StoreItem("1", "item1", 10);
+            StoreItem item2 = new StoreItem("2", "item2", 20);
+            StoreItem item3 = new StoreItem("3", "item3", 30);
+            _store.AddStoreItem(item1);
+            _store.AddStoreItem(item2);
+            _store.AddStoreItem(item3);
+            var item = _store.GetStoreItem("1");
+            Assert.AreEqual("item1", item.StoreitemName);
+            item = _store.GetStoreItem("3");
+            Assert.AreEqual("item3", item.StoreitemName);
         }
 
         [TestMethod()]
-        public void ListItemsOfStoreTest()
+        public void DeleteStoreItem()
         {
-            Assert.Fail();
+            StoreItem item1 = new StoreItem("1", "item1", 10);
+            StoreItem item2 = new StoreItem("2", "item2", 20);
+            StoreItem item3 = new StoreItem("3", "item3", 30);
+            _store.AddStoreItem(item1);
+            _store.AddStoreItem(item2);
+            _store.AddStoreItem(item3);
+            var item = _store.GetStoreItem("2");
+            Assert.AreEqual("item2", item.StoreitemName);
+            _store.DeleteStoreItem("item2");
+            item = _store.GetStoreItem("2");
+            Assert.AreEqual("", item.StoreitemName);
+        }
+
+        [TestMethod()]
+        public void DeleteStoreItem2()
+        {
+            StoreItem item1 = new StoreItem("1", "item1", 10);
+            StoreItem item2 = new StoreItem("2", "item2", 20);
+            StoreItem item3 = new StoreItem("3", "item3", 30);
+            _store.AddStoreItem(item1);
+            _store.AddStoreItem(item2);
+            _store.AddStoreItem(item3);
+            var item = _store.GetStoreItem("1");
+            Assert.AreEqual("item1", item.StoreitemName);
+
+            _store.DeleteStoreItemAt(0);
+            item = _store.GetStoreItem("1");
+            Assert.AreEqual("", item.StoreitemName);
+        }
+
+        [TestMethod()]
+        public void IsInStoreItemList()
+        {
+            StoreItem item1 = new StoreItem("1", "item1", 10);
+            StoreItem item2 = new StoreItem("2", "item2", 20);
+            StoreItem item3 = new StoreItem("3", "item3", 30);
+            bool isIn = _store.IsInStoreItemList(0);
+            Assert.IsFalse(isIn);
+            _store.AddStoreItem(item1);
+
+            isIn = _store.IsInStoreItemList(0);
+            Assert.IsTrue(isIn);
+
+            _store.AddStoreItem(item2);
+            _store.AddStoreItem(item3);
+            isIn = _store.IsInStoreItemList(2);
+            Assert.IsTrue(isIn);
+
+            isIn = _store.IsInStoreItemList(3);
+            Assert.IsFalse(isIn);
         }
     }
 }
