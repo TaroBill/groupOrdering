@@ -27,6 +27,15 @@ namespace groupOrdering.Domain.Tests
             _createOrderHandler = new CreateOrderHandler();
 
             var mockGroupBuyingsBoundary = new Mock<IGroupBuyingsBoundary>();
+
+            var store = new Store("1", "testStore", "address", "090000000");
+            store.AddStoreItem(new StoreItem("1", "item1", 10));
+            store.AddStoreItem(new StoreItem("2", "item2", 20));
+            mockGroupBuyingsBoundary.Setup(p => p.GetStoreByGroupbuyingID("1")).Returns(store);
+            mockGroupBuyingsBoundary.Setup(p => p.GetStoreByGroupbuyingID("2")).Returns(store);
+            mockGroupBuyingsBoundary.Setup(p => p.PublishGroupBuying(STORE_ID, SERVER_ID, DateTime.Today, USER_ID, "")).Returns(1);
+            _createOrderHandler.SetGroupBuyingsBoundary(mockGroupBuyingsBoundary.Object);
+
             mockGroupBuyingsBoundary.Setup(p => p.ListAllOrders(SERVER_ID)).Returns(new List<GroupBuying>()
             {
                 new GroupBuying(mockGroupBuyingsBoundary.Object, "1", "測試團購一", SERVER_ID),
