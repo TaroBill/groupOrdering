@@ -135,7 +135,7 @@ namespace groupOrdering.Domain
             {
                 return 0;
             }
-            int total = _joinOrderProcess[user.UserID].GetTotal(user);
+            int total = _joinOrderProcess[user.UserID].GetTotalPrice(user);
             return total;
         }
     }

@@ -58,7 +58,7 @@ namespace groupOrdering.UI
         {
             if (command.Data.Name != END_ORDER_COMMAND)
                 return;
-
+            //TODO catch 不是caller想結束訂單
             string userID = command.User.Id.ToString();
             User user = new User(userID);
             string groupbuyingID = string.Join(", ", command.Data.Options.First().Value);

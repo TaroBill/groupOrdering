@@ -62,6 +62,7 @@ namespace groupOrdering.Domain
 
         public string OrderToString()
         {
+            //TODO User的名字也要加入輸出
             string result = "";
             foreach (var pair in _items)
             {
