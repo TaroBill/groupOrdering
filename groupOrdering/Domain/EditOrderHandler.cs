@@ -103,7 +103,7 @@ namespace groupOrdering.Domain
             {
                 return 0;
             }
-            int total = _editOrderProcess[user.UserID].GetTotal(user);
+            int total = _editOrderProcess[user.UserID].GetTotalPrice(user);
             return total;
         }
     }

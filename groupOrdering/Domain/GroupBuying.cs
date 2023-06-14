@@ -176,15 +176,18 @@ namespace groupOrdering.Domain
             return _membersOrders[user.UserID].SubmitOrder(user, GroupBuyingID);
         }
 
-        public int GetTotal(User user)
+        public int GetTotalPrice(User user)
         {
             return _membersOrders[user.UserID].GetTotal();
         }
 
-        public int GetTotalPrice()
+        public MemberOrder GetMemberOrder(User user)
         {
-            throw new NotImplementedException();
+            if (!_membersOrders.ContainsKey(user.UserID))
+            {
+                return new MemberOrder();
+            }
+            return _membersOrders[user.UserID];
         }
-
     }
 }
