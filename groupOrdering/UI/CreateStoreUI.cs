@@ -74,7 +74,7 @@ namespace groupOrdering.UI
             List<StoreItem> storeItems = store.GetStoreItems();
             foreach (StoreItem storeItem in storeItems)
             {
-                stringBuilder.AppendLine($"{storeItem.StoreitemName} {storeItem.StoreitemPrice}");
+                stringBuilder.AppendLine($"{storeItem.StoreitemName} {storeItem.StoreitemPrice}元");
             }
             EmbedBuilder embedBuilder = new EmbedBuilder()
                 .WithTitle(store.StoreName)
