@@ -25,9 +25,6 @@ namespace groupOrdering.UI
 
         public async Task MainAsync()
         {
-            /*var user = await _client.GetUserAsync(ulong.Parse(""));
-            var name = user.Username;
-            await user.SendMessageAsync("");*/
             var cinfig = new DiscordSocketConfig
             {
                 GatewayIntents = GatewayIntents.AllUnprivileged | GatewayIntents.MessageContent

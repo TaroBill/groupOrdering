@@ -2,6 +2,7 @@
 using Discord.Net;
 using Discord.WebSocket;
 using groupOrdering.Domain;
+using log4net.Appender;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -58,11 +59,17 @@ namespace groupOrdering.UI
         {
             if (command.Data.Name != END_ORDER_COMMAND)
                 return;
-            //TODO catch 不是caller想結束訂單
             string userID = command.User.Id.ToString();
             User user = new User(userID);
             string groupbuyingID = string.Join(", ", command.Data.Options.First().Value);
-            await command.RespondAsync(text: _handler.EndGroupBuying(user, groupbuyingID), ephemeral: true);
+            List<String> userIDs = _handler.GetUsers(user, groupbuyingID);
+            String output = _handler.EndGroupBuying(user, groupbuyingID);
+            foreach (String _userID in userIDs)
+            {
+                var user1 = await _client.GetUserAsync(ulong.Parse(_userID));
+                output = output.Replace(_userID, user1.Username);
+            }
+            await command.RespondAsync(text: output, ephemeral: true);
         }
     }
 }

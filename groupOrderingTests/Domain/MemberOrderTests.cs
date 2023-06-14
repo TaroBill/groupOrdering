@@ -36,7 +36,7 @@ namespace groupOrdering.Domain.Tests
         public void AddItemTest()
         {
             _order.AddItem(new StoreItem("1", "item1", 100), 5);
-            Assert.AreEqual("item1 X 5\n", _order.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 5\n", _order.OrderToString());
         }
 
         [TestMethod()]
@@ -44,10 +44,10 @@ namespace groupOrdering.Domain.Tests
         {
             StoreItem storeItem = new StoreItem("1", "item1", 100);
             _order.AddItem(storeItem, 5);
-            Assert.AreEqual("item1 X 5\n", _order.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 5\n", _order.OrderToString());
 
             _order.EditItem(storeItem, 6);
-            Assert.AreEqual("item1 X 6\n", _order.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 6\n", _order.OrderToString());
         }
 
         [TestMethod()]
@@ -55,10 +55,10 @@ namespace groupOrdering.Domain.Tests
         {
             StoreItem storeItem = new StoreItem("1", "item1", 100);
             _order.AddItem(storeItem, 5);
-            Assert.AreEqual("item1 X 5\n", _order.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 5\n", _order.OrderToString());
 
             _order.DeleteItem(storeItem);
-            Assert.AreEqual("", _order.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n", _order.OrderToString());
         }
     }
 }
