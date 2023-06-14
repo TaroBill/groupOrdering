@@ -181,13 +181,11 @@ namespace groupOrdering.UI
             _handler.ChooseExistStore(user, storeList[num].StoreID, serverID);
 
             var createOrderModalBuilder = new ModalBuilder()
-                .WithTitle("請選擇截止時間")
+                .WithTitle("請輸入團購資料")
                 .WithCustomId(CREATE_ORDER_MODAL_ID)
                 .AddTextInput("團購名稱", "group-buying-name", required: true, maxLength: 45)
-                .AddTextInput("Year", "year", placeholder: "yyyy", required: true, maxLength: 4, minLength: 1)
-                .AddTextInput("Month", "month", placeholder: "MM", required: true, maxLength: 2, minLength: 1)
-                .AddTextInput("Day", "day", placeholder: "dd", required: true, maxLength: 2, minLength: 1)
-                .AddTextInput("Hour", "hour", placeholder: "hh", required: true, maxLength: 2, minLength: 1);
+                .AddTextInput("截止時間", "endTime", placeholder: "yyyy-MM-dd hh:mm", required: true, maxLength: 16, minLength: 10);
+
 
             await messageComponent.RespondWithModalAsync(createOrderModalBuilder.Build());
         }
@@ -200,11 +198,8 @@ namespace groupOrdering.UI
             try
             {
                 string groupBuyingName = components.First(x => x.CustomId == "group-buying-name").Value;
-                int year = Int32.Parse(components.First(x => x.CustomId == "year").Value);
-                int month = Int32.Parse(components.First(x => x.CustomId == "month").Value);
-                int day = Int32.Parse(components.First(x => x.CustomId == "day").Value);
-                int hour = Int32.Parse(components.First(x => x.CustomId == "hour").Value);
-                DateTime endTime = new DateTime(year, month, day, hour, 0, 0);
+                string endTimeString = components.First(x => x.CustomId == "endTime").Value;
+                DateTime endTime = DateTime.Parse(endTimeString);
                 if (!_handler.CheckEndTime(endTime))
                 {
                     await modal.RespondAsync("請設置現在以後的時間", ephemeral: true);

@@ -44,7 +44,7 @@ namespace groupOrdering.UI
 
         private async Task CreateStore_Ready()
         {
-            const ulong TEST_GUILD_ID = 344079293359587340;
+            const ulong TEST_GUILD_ID = 1093073444440133684;
 
             var guild = _client.GetGuild(TEST_GUILD_ID);
             var createOrderCommand = new SlashCommandBuilder()
@@ -204,7 +204,6 @@ namespace groupOrdering.UI
             string itemName = modal.Data.Components.First(x => x.CustomId == ITEM_NAME_TEXT_ID).Value;
             _handler.DeleteStoreItem(user, itemName);
             await modal.DeferAsync();
-
         }
     }
 }
