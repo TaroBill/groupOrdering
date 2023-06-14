@@ -83,7 +83,7 @@ namespace groupOrdering.Domain.Tests
             _groupBuying.JoinOrder(_user);
             _groupBuying.AddItem(_user, "1", 5);
             MemberOrder memberOrder = _groupBuying.GetMemberOrder(_user);
-            Assert.AreEqual("item1 X 5\n", memberOrder.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 5\n", memberOrder.OrderToString());
         }
 
         [TestMethod()]
@@ -92,11 +92,11 @@ namespace groupOrdering.Domain.Tests
             _groupBuying.JoinOrder(_user);
             _groupBuying.AddItem(_user, "1", 5);
             MemberOrder memberOrder = _groupBuying.GetMemberOrder(_user);
-            Assert.AreEqual("item1 X 5\n", memberOrder.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 5\n", memberOrder.OrderToString());
 
             _groupBuying.EditItem(_user, "1", 6);
             memberOrder = _groupBuying.GetMemberOrder(_user);
-            Assert.AreEqual("item1 X 6\n", memberOrder.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 6\n", memberOrder.OrderToString());
         }
 
         [TestMethod()]
@@ -105,11 +105,11 @@ namespace groupOrdering.Domain.Tests
             _groupBuying.JoinOrder(_user);
             _groupBuying.AddItem(_user, "1", 5);
             MemberOrder memberOrder = _groupBuying.GetMemberOrder(_user);
-            Assert.AreEqual("item1 X 5\n", memberOrder.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n\titem1 X 5\n", memberOrder.OrderToString());
 
             _groupBuying.DeleteItem(_user, "1");
             memberOrder = _groupBuying.GetMemberOrder(_user);
-            Assert.AreEqual("", memberOrder.OrderToString());
+            Assert.AreEqual($"{USER_ID}\n", memberOrder.OrderToString());
         }
 
         [TestMethod()]

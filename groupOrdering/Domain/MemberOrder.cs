@@ -62,11 +62,10 @@ namespace groupOrdering.Domain
 
         public string OrderToString()
         {
-            //TODO User的名字也要加入輸出
-            string result = "";
+            string result = $"{UserID}\n";
             foreach (var pair in _items)
             {
-                result += $"{pair.Key.StoreitemName} X {pair.Value}\n";
+                result += $"\t{pair.Key.StoreitemName} X {pair.Value}\n";
             }
             return result;
         }

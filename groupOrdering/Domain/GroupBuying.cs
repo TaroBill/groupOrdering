@@ -113,11 +113,11 @@ namespace groupOrdering.Domain
         {
             CallerUserID = user.UserID;
             GroupBuying data = _groupBuyingsBoundary.GetGroupBuyingByGroupID(user.UserID, GroupBuyingID);
+            InitGroupBuying(data._groupBuyingsBoundary, data.GroupBuyingID, data.GroupBuyingName, data._serverID, data.CallerUserID);
             if (data.GroupBuyingID == "0")
             {
-                throw new NullReferenceException("GroupBuying is not exist");
+                return;
             }
-            InitGroupBuying(data._groupBuyingsBoundary, data.GroupBuyingID, data.GroupBuyingName, data._serverID, data.CallerUserID);
             List<MemberOrder> memberOrders = _memberOrderBoundary.LoadMemberUserID(GroupBuyingID);
             foreach (MemberOrder memberOrder in memberOrders)
             {
@@ -151,6 +151,16 @@ namespace groupOrdering.Domain
         {
             _membersOrders.Add(user.UserID, new MemberOrder());
             _membersOrders[user.UserID].UserID = user.UserID;
+        }
+
+        public List<String> GetUsers()
+        {
+            List<String> users = new List<String>();
+            foreach(KeyValuePair<string, MemberOrder> order in _membersOrders)
+            {
+                users.Add(order.Key);
+            }
+            return users;
         }
 
         public void AddItem(User user, string itemID, int quantity)
