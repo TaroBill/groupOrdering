@@ -11,7 +11,7 @@ namespace groupOrdering.Technical
 {
     public class DAO
     {
-        static readonly string connectionString = "Server=220.134.59.172; User ID=admin; Password=ntutguest@; Database=groupordering";
+        static readonly string connectionString = File.ReadAllText("./Technical/DBConnect.txt");
         public List<T> GetData<T>(string command)
         {
             using var connection = new MySqlConnection(connectionString);
