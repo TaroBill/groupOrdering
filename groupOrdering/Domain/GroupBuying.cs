@@ -118,7 +118,6 @@ namespace groupOrdering.Domain
                 throw new NullReferenceException("GroupBuying is not exist");
             }
             InitGroupBuying(data._groupBuyingsBoundary, data.GroupBuyingID, data.GroupBuyingName, data._serverID, data.CallerUserID);
-            //TODO 下面的DB CODE應該放在G還是M??
             List<MemberOrder> memberOrders = _memberOrderBoundary.LoadMemberUserID(GroupBuyingID);
             foreach (MemberOrder memberOrder in memberOrders)
             {
