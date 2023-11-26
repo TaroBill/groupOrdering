@@ -1,0 +1,18 @@
+version: "2.21.0"
+
+services:
+  app:
+    container_name: group_ordering
+    image: group_ordering
+    working_dir: /app
+
+  mysql:
+    image: group_ordering_mysql
+    container_name: mysql_group_ordering
+    volumes:
+      - /group_ordering_mysql/mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: group_ordering
+    ports:
+      - 3306:3306

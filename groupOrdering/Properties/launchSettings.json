@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "groupOrdering": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
